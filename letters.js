@@ -1,6 +1,14 @@
-var vowelLetters =    ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ','ஃ']
-var vowelSigns = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ','ஂ']
-var consonants = ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'] 
+var langs = ["Tamil","Telugu"];
+var currentLang = 1
+var vowelLetterLangs =    [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ','ஃ'],
+['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ౠ','ఌ','ౡ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అఁ','అం','అః','—']]
+var vowelSignLangs = [['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ','ஂ'],
+['','ా','ి','ీ','ు','ూ','ృ','ౄ','ౢ','ౣ','ె','ే','ై','ొ','ో','ౌ','ఁ','ం','ః','ౕ']]
+var consonantLangs = [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'] ,
+['క','ఖ','గ','ఘ','ఙ','చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ']]
+var vowelLetters= vowelLetterLangs[currentLang];
+var vowelSigns = vowelSignLangs[currentLang];
+var consonants = consonantLangs[currentLang];
 var consonant = consonants[0];
 var vowelLetter = vowelLetters[0];
 var vowelSign;
@@ -50,8 +58,8 @@ function getIndexedvowelLetter(n) {
 }
 
 function addButton(n) {
-  var nextLine = n/9 > 1 ? 1 : 0;
-  var buttonX = nextLine ? stage.width() / 4 + (n-9)*100 +20: stage.width() / 4  +n*100 + 20;
+  var nextLine = n/18 > 1 ? 1 : 0;
+  var buttonX = nextLine ? stage.width() /6 + (n-18)*80 +20: stage.width() / 6  +n*80 + 20;
   var buttonY= 410*2 + 20 + nextLine * 40; 
   var button = new Konva.Label({
     x: buttonX,
@@ -136,14 +144,14 @@ function addWedge(n) {
   var text = new Konva.Text({
     text: reward,
     fontFamily: "Calibri",
-    fontSize: 80,
+    fontSize: 50,
     fill: "white",
     align: "center",
     stroke: "yellow",
     strokeWidth: 1,
     rotation: (Math.PI + angle) / 2,
     x: 390,
-    y: n == 11 ? 50 : 80,
+    y:50,
     listening: false,
   });
 
