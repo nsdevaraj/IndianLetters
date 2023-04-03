@@ -1,4 +1,5 @@
-var meiLetters = ['அ','ஆ','இ','ஈ','உ','ஊ','எ','ஏ','ஐ','ஒ','ஓ','ஔ']
+var uyirLetters = ['அ','ஆ','இ','ஈ','உ','ஊ','எ','ஏ','ஐ','ஒ','ஓ','ஔ']
+var meiLetters = ['க்','ங்','ச்','ஞ்','ட்','ண்','த்','ந்','ப்','ம்','ய்','ர்','ல்','வ்','ழ்','ள்','ற்','ன்']
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -39,7 +40,7 @@ function getRandomColor() {
 }
 
 function getRandomReward(n) {
-  var mainDigit = meiLetters[n];
+  var mainDigit = uyirLetters[n];
   return mainDigit;
 }
 function addWedge(n) {
