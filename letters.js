@@ -33,11 +33,11 @@ var consonantLangs = [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', '
 ['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],
 ['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍']
 ]
-var vowelLetters = vowelLetterLangs[currentLang];
-var vowelSigns = vowelSignLangs[currentLang];
-var consonants = consonantLangs[currentLang];
-var consonant = consonants[0];
-var vowelLetter = vowelLetters[0];
+var vowelLetters;
+var vowelSigns;
+var consonants;
+var consonant;
+var vowelLetter;
 var vowelSign;
 
 var width = window.innerWidth;
@@ -48,11 +48,19 @@ var angularVelocity = 6;
 var angularVelocities = [];
 var lastRotation = 0;
 var controlled = false;
-var numWedges = vowelLetters.length;
+var numWedges = vowelLetterLangs[0].length;
 var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
 var finished = false;
 
+function assignLanguage() {
+  vowelLetters = vowelLetterLangs[currentLang];
+  vowelSigns = vowelSignLangs[currentLang];
+  consonants = consonantLangs[currentLang];
+  consonant = consonants[0];
+  vowelLetter = vowelLetters[0];
+  numWedges = vowelLetters.length
+}
 function getAverageAngularVelocity() {
   var total = 0;
   var len = angularVelocities.length;
@@ -247,6 +255,7 @@ function animate(frame) {
   }
 }
 function init() {
+  assignLanguage()
   stage = new Konva.Stage({
     container: "container",
     width: width,
@@ -343,11 +352,5 @@ function init() {
 
 function setCurrentLang(dropdown) {
   currentLang = dropdown.value;
-
-  vowelLetters = vowelLetterLangs[currentLang];
-  vowelSigns = vowelSignLangs[currentLang];
-  consonants = consonantLangs[currentLang];
-  consonant = consonants[0];
-  vowelLetter = vowelLetters[0];
   init();
 }
