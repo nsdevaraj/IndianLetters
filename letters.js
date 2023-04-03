@@ -1,8 +1,9 @@
-var uyirLetters = ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ']
-var meiLetters = ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன']
-var meiLettersDisplay = ['க்', 'ங்', 'ச்', 'ஞ்', 'ட்', 'ண்', 'த்', 'ந்', 'ப்', 'ம்', 'ய்', 'ர்', 'ல்', 'வ்', 'ழ்', 'ள்', 'ற்', 'ன்']
-
-var uyirMeiLetters = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ', 'ஂ']
+var vowelLetters =    ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ']
+var vowelSigns = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ']
+var consonants = ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'] 
+var consonant = consonants[0];
+var vowelLetter = vowelLetters[0];
+var vowelSign;
 
 var width = window.innerWidth;
 var height = window.innerHeight;
@@ -12,7 +13,7 @@ var angularVelocity = 6;
 var angularVelocities = [];
 var lastRotation = 0;
 var controlled = false;
-var numWedges = uyirLetters.length;
+var numWedges = vowelLetters.length;
 var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
 var finished = false;
@@ -43,15 +44,18 @@ function getRandomColor() {
   return purifyColor([r, g, b]);
 }
 
-function getIndexedUyirLetter(n) {
-  var mainDigit = uyirLetters[n];
+function getIndexedvowelLetter(n) {
+  var mainDigit = vowelLetters[n];
   return mainDigit;
 }
 
 function addButton(n) {
+  var nextLine = n/9 > 1 ? 1 : 0;
+  var buttonX = nextLine ? stage.width() / 4 + (n-9)*100 +20: stage.width() / 4  +n*100 + 20;
+  var buttonY= 410*2 + 20 + nextLine * 40; 
   var button = new Konva.Label({
-    x: n*100 + 20,
-    y: 410*2+ 20,
+    x: buttonX,
+    y: buttonY,
     opacity: 0.75
   });
   layer.add(button);
@@ -63,24 +67,24 @@ function addButton(n) {
     shadowBlur: 10,
     shadowOffset: 10,
     shadowOpacity: 0.5
-  }));
-
+  })); 
 
   button.add(new Konva.Text({
-    text: meiLetters[n],
+    text: consonants[n]+'ஂ',
     fontFamily: 'Calibri',
     fontSize: 18,
     padding: 5,
     fill: 'white'
   }));
   button.on('click', () => {
-    alert('clicked on button');
+    consonant =consonants[n];
+    alert( (consonant+'ஂ')+ ' selected');
   })
 }
 
 function addWedge(n) {
   var s = getRandomColor();
-  var reward = getIndexedUyirLetter(n);
+  var reward = getIndexedvowelLetter(n);
   var r = s[0];
   var g = s[1];
   var b = s[2];
@@ -110,7 +114,6 @@ function addWedge(n) {
     stroke: "#ccc",
     strokeWidth: 2,
   });
-
 
   var wedgeBorderBackground = new Konva.Wedge({
     radius: 400,
@@ -178,8 +181,11 @@ function animate(frame) {
     } else if (!finished && !controlled) {
       if (shape) {
         var text = shape.getParent().findOne("Text").text();
-        var price = text.split("\n").join("");
-        //alert("You price is " + price);
+        var price = text.split("\n").join(""); 
+        vowelLetter = price; 
+        vowelSign = vowelSigns[vowelLetters.indexOf(vowelLetter)];
+        
+        alert(  consonant+'ஂ'+" + " + vowelLetter +" = "+ consonant+vowelSign )
       }
       finished = true;
     }
@@ -214,9 +220,9 @@ function init() {
   layer = new Konva.Layer();
   wheel = new Konva.Group({
     x: stage.width() / 2,
-    y: 410,
+    y: stage.height() /2 -50,
   });
-  for (var n = 0; n < meiLetters.length; n++) {
+  for (var n = 0; n < consonants.length; n++) {
     addButton(n);
   }
   for (var n = 0; n < numWedges; n++) {
