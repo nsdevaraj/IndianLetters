@@ -1,19 +1,22 @@
-var langs = ["Tamil","Telugu","Kannada","Hindi","Oriya"];
+var langs = ["Tamil", "Telugu", "Kannada", "Hindi", "Oriya"];
 var currentLang = 3
-var vowelLetterLangs =    [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ','ஃ'],
-['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ౠ','ఌ','ౡ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ','అఁ','అం','అః','—'],
-['ಅ','ಆ','ಇ','ಈ','ಉ','ಊ','ಋ','ೠ','ಎ','ಏ','ಐ','ಒ','ಓ','ಔ','ಅಂ','ಅಃ','—'],
+var vowelLetterLangs = [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'],
+['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఌ', 'ౡ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ', 'అఁ', 'అం', 'అః', '—'],
+['ಅ', 'ಆ', 'ಇ', 'ಈ', 'ಉ', 'ಊ', 'ಋ', 'ೠ', 'ಎ', 'ಏ', 'ಐ', 'ಒ', 'ಓ', 'ಔ', 'ಅಂ', 'ಅಃ', '—'],
+['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'],
 ['ଅ', 'ଆ', 'ଇ', 'ଈ', 'ଉ', 'ଊ', 'ଋ', 'ୠ', 'ଌ', 'ୡ', 'ଏ', 'ଐ', 'ଓ', 'ଔ']
 ]
-var vowelSignLangs = [['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ','ஂ'],
-['','ా','ి','ీ','ు','ూ','ృ','ౄ','ౢ','ౣ','ె','ే','ై','ొ','ో','ౌ','ఁ','ం','ః','ౕ'],
-['','ಾ','ಿ','ೀ','ು','ೂ','ೃ','ೄ','ೆ','ೇ','ೈ','ೊ','ೋ','ೌ','ಂ','ಃ','ೕ' ],
-['','ା','ି','ୀ','ୁ','ୂ','ୃ','ୄ','ୢ','ୣ','େ','ୈ','ୋ','ୌ']]
-var consonantLangs = [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'] ,
-['క','ఖ','గ','ఘ','ఙ','చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ'],
+var vowelSignLangs = [['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ', 'ஂ'],
+['', 'ా', 'ి', 'ీ', 'ు', 'ూ', 'ృ', 'ౄ', 'ౢ', 'ౣ', 'ె', 'ే', 'ై', 'ొ', 'ో', 'ౌ', 'ఁ', 'ం', 'ః', 'ౕ'],
+['', 'ಾ', 'ಿ', 'ೀ', 'ು', 'ೂ', 'ೃ', 'ೄ', 'ೆ', 'ೇ', 'ೈ', 'ೊ', 'ೋ', 'ೌ', 'ಂ', 'ಃ', 'ೕ'],
+['','ा','ि','ी','ु','ू','े','ै','ो','ौ','ं','ः'],
+['', 'ା', 'ି', 'ୀ', 'ୁ', 'ୂ', 'ୃ', 'ୄ', 'ୢ', 'ୣ', 'େ', 'ୈ', 'ୋ', 'ୌ']]
+var consonantLangs = [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'],
+['క', 'ఖ', 'గ', 'ఘ', 'ఙ', 'చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ'],
 ['ಕ', 'ಖ', 'ಗ', 'ಘ', 'ಙ', 'ಚ', 'ಛ', 'ಜ', 'ಝ', 'ಞ', 'ಟ', 'ಠ', 'ಡ', 'ಢ', 'ಣ', 'ತ', 'ಥ', 'ದ', 'ಧ', 'ನ', 'ಪ', 'ಫ', 'ಬ', 'ಭ', 'ಮ', 'ಯ', 'ರ', 'ಱ', 'ಲ', 'ವ', 'ಶ', 'ಷ', 'ಸ', 'ಹ', 'ಳ', 'ೞ'],
-['କ୍',  'ଖ୍', 'ଗ୍', 'ଘ୍',  'ଙ୍', 'ଚ୍',  'ଛ୍', 'ଜ୍',  'ଝ୍', 'ଞ୍', 'ଟ୍',  'ଠ୍', 'ଡ୍', 'ଢ୍',  'ଣ୍', 'ତ୍',  'ଥ୍', 'ଦ୍', 'ଧ୍',  'ନ୍', 'ପ୍',  'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍',  'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍',  'ଷ୍', 'ସ୍', 'ହ୍']]
-var vowelLetters= vowelLetterLangs[currentLang];
+['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह'],
+['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍']]
+var vowelLetters = vowelLetterLangs[currentLang];
 var vowelSigns = vowelSignLangs[currentLang];
 var consonants = consonantLangs[currentLang];
 var consonant = consonants[0];
@@ -21,7 +24,7 @@ var vowelLetter = vowelLetters[0];
 var vowelSign;
 
 var width = window.innerWidth;
-var height = window.innerHeight; 
+var height = window.innerHeight;
 
 Konva.angleDeg = false;
 var angularVelocity = 6;
@@ -65,9 +68,9 @@ function getIndexedvowelLetter(n) {
 }
 
 function addButton(n) {
-  var nextLine = n/18 > 1 ? 1 : 0;
-  var buttonX = nextLine ? stage.width() /6 + (n-18)*80 +20: stage.width() / 6  +n*80 + 20;
-  var buttonY= 410*2 + 20 + nextLine * 40; 
+  var nextLine = n / 18 > 1 ? 1 : 0;
+  var buttonX = nextLine ? stage.width() / 6 + (n - 18) * 80 + 20 : stage.width() / 6 + n * 80 + 20;
+  var buttonY = 410 * 2 + 20 + nextLine * 40;
   var button = new Konva.Label({
     x: buttonX,
     y: buttonY,
@@ -82,7 +85,7 @@ function addButton(n) {
     shadowBlur: 10,
     shadowOffset: 10,
     shadowOpacity: 0.5
-  })); 
+  }));
 
   button.add(new Konva.Text({
     text: consonants[n],
@@ -92,8 +95,8 @@ function addButton(n) {
     fill: 'white'
   }));
   button.on('click', () => {
-    consonant =consonants[n];
-    alert('selected consonant : '+ consonant);
+    consonant = consonants[n];
+    alert('selected consonant : ' + consonant);
   })
 }
 
@@ -158,7 +161,7 @@ function addWedge(n) {
     strokeWidth: 1,
     rotation: (Math.PI + angle) / 2,
     x: 390,
-    y:50,
+    y: 50,
     listening: false,
   });
 
@@ -196,11 +199,11 @@ function animate(frame) {
     } else if (!finished && !controlled) {
       if (shape) {
         var text = shape.getParent().findOne("Text").text();
-        var price = text.split("\n").join(""); 
-        vowelLetter = price; 
+        var price = text.split("\n").join("");
+        vowelLetter = price;
         vowelSign = vowelSigns[vowelLetters.indexOf(vowelLetter)];
-        
-        alert(  consonant+" + " + vowelLetter +" = "+ consonant+vowelSign )
+
+        alert(consonant + " + " + vowelLetter + " = " + consonant + vowelSign)
       }
       finished = true;
     }
@@ -235,7 +238,7 @@ function init() {
   layer = new Konva.Layer();
   wheel = new Konva.Group({
     x: stage.width() / 2,
-    y: stage.height() /2 -50,
+    y: stage.height() / 2 - 50,
   });
   for (var n = 0; n < consonants.length; n++) {
     addButton(n);
