@@ -1,12 +1,12 @@
-var vowelLetters =    ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ']
-var vowelSigns = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ']
+var vowelLetters =    ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ','ஃ']
+var vowelSigns = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ','ஂ']
 var consonants = ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'] 
 var consonant = consonants[0];
 var vowelLetter = vowelLetters[0];
 var vowelSign;
 
 var width = window.innerWidth;
-var height = window.innerHeight;
+var height = window.innerHeight; 
 
 Konva.angleDeg = false;
 var angularVelocity = 6;
@@ -70,7 +70,7 @@ function addButton(n) {
   })); 
 
   button.add(new Konva.Text({
-    text: consonants[n]+'ஂ',
+    text: consonants[n],
     fontFamily: 'Calibri',
     fontSize: 18,
     padding: 5,
@@ -78,7 +78,7 @@ function addButton(n) {
   }));
   button.on('click', () => {
     consonant =consonants[n];
-    alert( (consonant+'ஂ')+ ' selected');
+    alert('selected consonant : '+ consonant);
   })
 }
 
@@ -185,7 +185,7 @@ function animate(frame) {
         vowelLetter = price; 
         vowelSign = vowelSigns[vowelLetters.indexOf(vowelLetter)];
         
-        alert(  consonant+'ஂ'+" + " + vowelLetter +" = "+ consonant+vowelSign )
+        alert(  consonant+" + " + vowelLetter +" = "+ consonant+vowelSign )
       }
       finished = true;
     }
