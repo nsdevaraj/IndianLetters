@@ -115,6 +115,7 @@ function addWedge(n) {
     rotation: (2 * n * Math.PI) / numWedges,
   });
   n % 2 ? startCol = '#ff0000' : startCol = '#660000';
+  n % 2 ? startBgCol = '#980044' : startBgCol = '#7433cc';
   var wedgeBorderBackground = new Konva.Wedge({
     radius: 400,
     angle: angle,
@@ -128,7 +129,7 @@ function addWedge(n) {
     stroke: "#ccc",
     strokeWidth: 2,
   });
-  wedge.add(wedgeBorderBackground);
+  wedge.add(wedgeBorderBackground); // outer text circle 
   var wedgeBackground = new Konva.Wedge({
     radius: 300,
     angle: angle,
@@ -136,13 +137,21 @@ function addWedge(n) {
     fillRadialGradientStartRadius: 0,
     fillRadialGradientEndPoint: 0,
     fillRadialGradientEndRadius: 300,
-    fillRadialGradientColorStops: [0, '#4433cc', 1, '#443322'],
+    fillRadialGradientColorStops: [0, startBgCol, 1, '#773344'],
     fill: "#64e9f8",
     fillPriority: "radial-gradient",
     stroke: "#ccc",
     strokeWidth: 2,
   });
-  wedge.add(wedgeBackground);
+  wedge.add(wedgeBackground);// 1st inner circle 
+  var wedgeBackground = new Konva.Wedge({
+    radius: 220,
+    angle: angle,  
+    fill: "#443344", 
+    stroke: "#ccc",
+    strokeWidth: 1,
+  });
+  wedge.add(wedgeBackground);// 2nd inner circle 
   var text = new Konva.Text({
     text: reward,
     fontFamily: "Calibri",
