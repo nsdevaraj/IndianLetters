@@ -1,4 +1,4 @@
-var langs = ["Tamil", "Telugu", "Kannada","Bengali", "Hindi", "Oriya"];
+var langs = ["Tamil", "Telugu", "Kannada","Bengali", "Hindi", "Punjabi","Gujarati","Malayalam", "Oriya"];
 var currentLang = 3
 var vowelLetterLangs = [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'],
 ['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఌ', 'ౡ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ', 'అఁ', 'అం', 'అః', '—'],
