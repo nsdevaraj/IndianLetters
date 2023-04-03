@@ -79,7 +79,7 @@ function getAverageAngularVelocity() {
 function addButton(n) {
   var nextLine = n / 18 > 1 ? 1 : 0;
   var buttonX = nextLine ? stage.width() / 6 + (n - 18) * 80 + 20 : stage.width() / 6 + n * 80 + 20;
-  var buttonY = 410 * 2 + 20 + nextLine * 40;
+  var buttonY = 20 + nextLine * 40;
   var button = new Konva.Label({
     x: buttonX,
     y: buttonY,
@@ -204,11 +204,11 @@ function animate(frame) {
   lastRotation = wheel.rotation();
   if (shape) {
     if (shape && (!activeWedge || shape._id !== activeWedge._id)) {
-      pointer.y(20);
+      pointer.y(90);
       new Konva.Tween({
         node: pointer,
         duration: 0.3,
-        y: 30,
+        y: 95,
         easing: Konva.Easings.ElasticEaseOut,
       }).play();
       if (activeWedge) {
@@ -229,7 +229,7 @@ function init() {
   layer = new Konva.Layer();
   wheel = new Konva.Group({
     x: stage.width() / 2,
-    y: stage.height() / 2 - 50,
+    y: stage.height() / 2 + 30,
   });
   for (var n = 0; n < consonants.length; n++) {
     addButton(n);
@@ -249,7 +249,7 @@ function init() {
     angle: 1,
     radius: 30,
     x: stage.width() / 2,
-    y: 33,
+    y: 90,
     rotation: -90,
     shadowColor: "black",
     shadowOffsetX: 3,
