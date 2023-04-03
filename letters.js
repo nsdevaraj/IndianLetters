@@ -347,5 +347,7 @@ function setCurrentLang(dropdown) {
   vowelLetters = vowelLetterLangs[currentLang];
   vowelSigns = vowelSignLangs[currentLang];
   consonants = consonantLangs[currentLang];
+  consonant = consonants[0];
+  vowelLetter = vowelLetters[0];
   init();
 }
