@@ -2,7 +2,7 @@ var uyirLetters = ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ'
 var meiLetters = ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன']
 var meiLettersDisplay = ['க்', 'ங்', 'ச்', 'ஞ்', 'ட்', 'ண்', 'த்', 'ந்', 'ப்', 'ம்', 'ய்', 'ர்', 'ல்', 'வ்', 'ழ்', 'ள்', 'ற்', 'ன்']
 
-var uyirMeiLetters = [ '','ா','ி','ீ','ு','ூ','ெ','ே','ை','ொ','ோ','ௌ','ஂ']
+var uyirMeiLetters = ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ', 'ஂ']
 
 var width = window.innerWidth;
 var height = window.innerHeight;
@@ -47,6 +47,37 @@ function getIndexedUyirLetter(n) {
   var mainDigit = uyirLetters[n];
   return mainDigit;
 }
+
+function addButton(n) {
+  var button = new Konva.Label({
+    x: n*100 + 20,
+    y: 410*2+ 20,
+    opacity: 0.75
+  });
+  layer.add(button);
+
+  button.add(new Konva.Tag({
+    fill: 'black',
+    lineJoin: 'round',
+    shadowColor: 'black',
+    shadowBlur: 10,
+    shadowOffset: 10,
+    shadowOpacity: 0.5
+  }));
+
+
+  button.add(new Konva.Text({
+    text: meiLetters[n],
+    fontFamily: 'Calibri',
+    fontSize: 18,
+    padding: 5,
+    fill: 'white'
+  }));
+  button.on('click', () => {
+    alert('clicked on button');
+  })
+}
+
 function addWedge(n) {
   var s = getRandomColor();
   var reward = getIndexedUyirLetter(n);
@@ -174,9 +205,6 @@ function animate(frame) {
     }
   }
 }
-
-
-
 function init() {
   stage = new Konva.Stage({
     container: "container",
@@ -188,7 +216,9 @@ function init() {
     x: stage.width() / 2,
     y: 410,
   });
-
+  for (var n = 0; n < meiLetters.length; n++) {
+    addButton(n);
+  }
   for (var n = 0; n < numWedges; n++) {
     addWedge(n);
   }
