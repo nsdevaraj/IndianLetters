@@ -42,7 +42,7 @@ var vowelSign;
 var width;
 var height;
 var currentLang = 0
-
+var prevletter 
 Konva.angleDeg = false;
 var angularVelocity = 6;
 var angularVelocities = [];
@@ -80,13 +80,19 @@ function getAverageAngularVelocity() {
 function addButton(n) { 
   const div = document.createElement('div'); 
   div.className = 'letter';  
-  div.innerHTML =`<input type="button" class="btn" value="`+consonants[n]+`" onclick="selectConsonant(this)" />`
+  div.innerHTML =`<input type="button" class="btn" value="`+consonants[n]+`" onclick="selectConsonant(this)"  />` 
   document.getElementById('consonDiv').appendChild(div);
+  if(n==0){
+    prevletter = div.childNodes[0];
+    div.childNodes[0].style.backgroundColor = "#88a119";
+  }
 }
 
 function selectConsonant(letter){ 
   consonant = letter.value;
-  alert('selected consonant : ' + letter.value);
+  if(prevletter)prevletter.style.backgroundColor= "#c8a119"
+  letter.style.backgroundColor = "#88a119";
+  prevletter = letter; 
 }
 
 function addWedge(n) {
