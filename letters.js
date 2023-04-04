@@ -1,5 +1,4 @@
 var langs = ["Tamil", "Telugu", "Kannada", "Bengali", "Hindi", "Punjabi", "Malayalam", "Gujarati", "Sinhala", "Oriya"];
-var currentLang = 0
 var vowelLetterLangs = [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'],
 ['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఌ', 'ౡ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ', 'అఁ', 'అం', 'అః', '—'],
 ['ಅ', 'ಆ', 'ಇ', 'ಈ', 'ಉ', 'ಊ', 'ಋ', 'ೠ', 'ಎ', 'ಏ', 'ಐ', 'ಒ', 'ಓ', 'ಔ', 'ಅಂ', 'ಅಃ', '—'],
@@ -40,8 +39,9 @@ var consonant;
 var vowelLetter;
 var vowelSign;
 
-var width = window.innerWidth;
-var height = window.innerHeight;
+var width;
+var height;
+var currentLang = 0
 
 Konva.angleDeg = false;
 var angularVelocity = 6;
@@ -54,6 +54,8 @@ var target, activeWedge, stage, layer, wheel, pointer;
 var finished = false;
 
 function assignLanguage() {
+  width = window.innerWidth;
+  height = window.innerHeight; 
   vowelLetters = vowelLetterLangs[currentLang];
   vowelSigns = vowelSignLangs[currentLang];
   consonants = consonantLangs[currentLang];
@@ -97,7 +99,7 @@ function addButton(n) {
   button.add(new Konva.Text({
     text: consonants[n],
     fontFamily: 'Calibri',
-    fontSize: 18,
+    fontSize: 20,
     padding: 5,
     fill: 'white'
   }));
@@ -109,7 +111,8 @@ function addButton(n) {
 
 function addWedge(n) {
   var reward = vowelLetters[n];
-
+  var circleRadius= stage.width()/3;
+  var innerCircleRadius = circleRadius - circleRadius/4
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
@@ -117,12 +120,12 @@ function addWedge(n) {
   n % 2 ? startCol = '#ff0000' : startCol = '#660000';
   n % 2 ? startBgCol = '#980044' : startBgCol = '#7433cc';
   var wedgeBorderBackground = new Konva.Wedge({
-    radius: 400,
+    radius: circleRadius, 
     angle: angle,
-    fillRadialGradientStartPoint: 300,
-    fillRadialGradientStartRadius: 300,
-    fillRadialGradientEndPoint: 300,
-    fillRadialGradientEndRadius: 400,
+    fillRadialGradientStartPoint: innerCircleRadius, 
+    fillRadialGradientStartRadius: innerCircleRadius, 
+    fillRadialGradientEndPoint: innerCircleRadius,  
+    fillRadialGradientEndRadius: circleRadius, 
     fillRadialGradientColorStops: [0, startCol, 1, '#000000'],
     fill: "#008800", //highlight selected color
     fillPriority: "radial-gradient",
@@ -131,12 +134,12 @@ function addWedge(n) {
   });
   wedge.add(wedgeBorderBackground); // outer text circle 
   var wedgeBackground = new Konva.Wedge({
-    radius: 300,
+    radius: innerCircleRadius,  
     angle: angle,
     fillRadialGradientStartPoint: 0,
     fillRadialGradientStartRadius: 0,
     fillRadialGradientEndPoint: 0,
-    fillRadialGradientEndRadius: 300,
+    fillRadialGradientEndRadius: innerCircleRadius,  
     fillRadialGradientColorStops: [0, startBgCol, 1, '#773344'],
     fill: "#64e9f8",
     fillPriority: "radial-gradient",
@@ -145,9 +148,9 @@ function addWedge(n) {
   });
   wedge.add(wedgeBackground);// 1st inner circle 
   var wedgeBackground = new Konva.Wedge({
-    radius: 220,
-    angle: angle,  
-    fill: "#443344", 
+    radius: (circleRadius/2)+20, 
+    angle: angle,
+    fill: "#443344",
     stroke: "#ccc",
     strokeWidth: 1,
   });
@@ -155,14 +158,14 @@ function addWedge(n) {
   var text = new Konva.Text({
     text: reward,
     fontFamily: "Calibri",
-    fontSize: 50,
+    fontSize: 30,
     fill: "white",
     align: "center",
     stroke: "yellow",
     strokeWidth: 1,
     rotation: (Math.PI + angle) / 2,
-    x: 390,
-    y: 50,
+    x: circleRadius -10,  
+    y: 50, 
     listening: false,
   });
   wedge.add(text);
@@ -178,7 +181,7 @@ function animate(frame) {
   // activate / deactivate wedges based on point intersection
   var shape = stage.getIntersection({
     x: stage.width() / 2,
-    y: 100,
+    y: 100, // hard
   });
   if (controlled) {
     if (angularVelocities.length > 10) {
@@ -220,7 +223,7 @@ function animate(frame) {
   }
 }
 function init() {
-  assignLanguage()
+  assignLanguage();
   stage = new Konva.Stage({
     container: "container",
     width: width,
@@ -310,6 +313,9 @@ function init() {
     anim.start();
   }, 500);
 }
+window.onresize = function (event) {
+  init();
+};
 
 function setCurrentLang(dropdown) {
   currentLang = dropdown.value;
