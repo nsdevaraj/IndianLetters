@@ -97,7 +97,7 @@ function selectConsonant(letter){
 
 function addWedge(n) {
   var reward = vowelLetters[n];
-  var circleRadius= (stage.width()/3)-(20);
+  var circleRadius= stage.width()/4
   var innerCircleRadius = circleRadius - circleRadius/4
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
@@ -151,7 +151,7 @@ function addWedge(n) {
     strokeWidth: 1,
     rotation: (Math.PI + angle) / 2,
     x: circleRadius -10,  
-    y: 50, 
+    y: circleRadius/8, 
     listening: false,
   });
   wedge.add(text);
@@ -220,7 +220,7 @@ function init() {
   layer = new Konva.Layer();
   wheel = new Konva.Group({
     x: stage.width() / 2,
-    y: stage.height() / 2 + 5,
+    y: stage.height() / 2 - 50,
   });
   for (var n = 0; n < consonants.length; n++) {
     addButton(n);
@@ -297,7 +297,7 @@ function init() {
     anim.start();
   }, 500);
 }
-window.onresize = function (event) {
+window.onresize = function (event) { 
   init();
 };
 

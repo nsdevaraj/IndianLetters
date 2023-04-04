@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 10;
   padding: 0;
   overflow: hidden;
   background-color: #110000;
@@ -20,7 +20,7 @@ select {
 }
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(18, 1fr);
+  grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(2, 30px);
 }
 .btn {
