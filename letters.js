@@ -32,7 +32,7 @@ var consonantLangs = [[['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 
 [['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],['ka','kha','ga','gha','nga','ⁿga  ca','cha','ja','jha','ña','jña','ñja  Ṭa','Ṭha','Ḍa','Ḍha','Ṇa','ⁿḌa  ta','tha','da','dha','na','ⁿda  pa','pha','ba','bha','ma','ᵐba  ya',' ra',' la','Ḷa','va','ha','śa','Ṣa','sa','fa']],
 [['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍'],['k', 'kh', 'ga', 'gh', 'n', 'ch', 'chh', 'ja', 'jh', 'n', 't', 'th', 'd', 'dh', 'n', 't', 'th', 'd', 'dh', 'n', 'p', 'f', 'b', 'bh', 'm', 'ya', 'y', 'r', 'l', 'l', 'w', 'sh', 'sh', 's', 'h']]
 ]
-var vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign;
+var vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign, consonantPhs, vowelLetterPhs, consonantPh, vowelLetterPh, consonantIndex;
 var width;
 var height;
 var currentLang = 0;
@@ -47,16 +47,28 @@ var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
 var meyEzuthu='்'
 var finished = false;
+// Initialize new SpeechSynthesisUtterance object
+var speech = new SpeechSynthesisUtterance();
+// Set Speech Language
+speech.lang = "en";
+speech.rate = speech.volume = speech.pitch = 1;
+
+// Get List of Voices
+voices = window.speechSynthesis.getVoices();
+// Initially set the First Voice in the Array.
+speech.voice = voices[0];
 
 function assignLanguage() {
   document.getElementById('consonDiv').innerHTML = '';
   width = window.innerWidth;
   height = window.innerHeight; 
-  debugger
   vowelLetters = vowelLetterLangs[currentLang][0];
   vowelSigns = vowelSignLangs[currentLang];
   consonants = consonantLangs[currentLang][0];
+  consonantPhs = consonantLangs[currentLang][1];
+  vowelLetterPhs = vowelLetterLangs[currentLang][1];
   consonant = consonants[0];
+  consonantIndex = 0;
   vowelLetter = vowelLetters[0];
   numWedges = vowelLetters.length;
 }
@@ -76,7 +88,7 @@ function getAverageAngularVelocity() {
 function addButton(n) { 
   const div = document.createElement('div'); 
   div.className = 'letter';
-  div.innerHTML =`<input type="button" class="btn" value="`+consonants[n]+`" onclick="selectConsonant(this)"  />` 
+  div.innerHTML =`<input id="`+n+`" type="button" class="btn" value="`+consonants[n]+`" onclick="selectConsonant(this)"  />` 
   document.getElementById('consonDiv').appendChild(div);
   if(n==0){
     prevletter = div.childNodes[0];
@@ -84,7 +96,8 @@ function addButton(n) {
   }
 }
 
-function selectConsonant(letter){ 
+function selectConsonant(letter){  
+  consonantIndex = parseInt(letter.id)
   consonant = letter.value;
   if(prevletter)prevletter.style.backgroundColor= "#c8a119"
   letter.style.backgroundColor = "#88a119";
@@ -155,7 +168,10 @@ function addWedge(n) {
   wedge.startRotation = wedge.rotation();
   wheel.add(wedge);
 }
- 
+function speak(text){
+  speech.text = text
+  window.speechSynthesis.speak(speech);
+} 
 function animate(frame) {
   // handle wheel spin
   var angularVelocityChange =
@@ -181,7 +197,11 @@ function animate(frame) {
       if (shape) {
         var text = shape.getParent().findOne("Text").text();
         vowelLetter = text;
-        vowelSign = vowelSigns[vowelLetters.indexOf(vowelLetter)];
+        var vowelIndex = vowelLetters.indexOf(vowelLetter)
+        vowelSign = vowelSigns[vowelIndex]; 
+        consonantPh= consonantPhs[consonantIndex];
+        vowelLetterPh= vowelLetterPhs[vowelIndex];
+        speak(consonantPh+ "+" +vowelLetterPh );
         alert(consonant + " + " + vowelLetter + " = " + consonant + vowelSign)
       }
       finished = true;
