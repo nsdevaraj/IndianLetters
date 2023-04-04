@@ -91,7 +91,7 @@ function selectConsonant(letter){
 
 function addWedge(n) {
   var reward = vowelLetters[n];
-  var circleRadius= stage.width()/3;
+  var circleRadius= (stage.width()/3)-(20);
   var innerCircleRadius = circleRadius - circleRadius/4
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
@@ -162,7 +162,7 @@ function animate(frame) {
   // activate / deactivate wedges based on point intersection
   var shape = stage.getIntersection({
     x: stage.width() / 2,
-    y: 100, // hard
+    y: 100, // length to detect collision
   });
   if (controlled) {
     if (angularVelocities.length > 10) {
