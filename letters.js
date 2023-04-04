@@ -188,11 +188,11 @@ function animate(frame) {
   lastRotation = wheel.rotation();
   if (shape) {
     if (shape && (!activeWedge || shape._id !== activeWedge._id)) {
-      pointer.y(90);
+      pointer.y(10);
       new Konva.Tween({
         node: pointer,
         duration: 0.3,
-        y: 95,
+        y: 15,
         easing: Konva.Easings.ElasticEaseOut,
       }).play();
       if (activeWedge) {
@@ -214,7 +214,7 @@ function init() {
   layer = new Konva.Layer();
   wheel = new Konva.Group({
     x: stage.width() / 2,
-    y: stage.height() / 2 + 30,
+    y: stage.height() / 2 + 5,
   });
   for (var n = 0; n < consonants.length; n++) {
     addButton(n);
@@ -234,7 +234,7 @@ function init() {
     angle: 1,
     radius: 30,
     x: stage.width() / 2,
-    y: 90,
+    y: 20,
     rotation: -90,
     shadowColor: "black",
     shadowOffsetX: 3,
