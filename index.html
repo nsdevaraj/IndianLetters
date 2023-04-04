@@ -17,11 +17,20 @@
         grid-template-columns: repeat(18, 1fr);
         grid-template-rows: repeat(2, 30px);
       }
+      .btn {
+        height: 30px;
+        line-height: 20px;
+        width: 30px; 
+        border-radius: 50%;
+        background-color: #c8a119; 
+        text-align: center;
+        cursor: pointer;
+      }
     </style>
   </head>
 
   <body>
-    <div class="wrapper" id="consonDiv"> </div>
+    <div class="wrapper" id="consonDiv"></div>
     <select name="langs" id="currentLanguage" onchange="setCurrentLang(this)">
       <option value="0">Tamil</option>
       <option value="1">Telugu</option>

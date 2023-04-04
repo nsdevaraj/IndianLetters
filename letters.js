@@ -80,7 +80,7 @@ function getAverageAngularVelocity() {
 function addButton(n) { 
   const div = document.createElement('div'); 
   div.className = 'letter';  
-  div.innerHTML =`<input type="button" value="`+consonants[n]+`" onclick="selectConsonant(this)" />`
+  div.innerHTML =`<input type="button" class="btn" value="`+consonants[n]+`" onclick="selectConsonant(this)" />`
   document.getElementById('consonDiv').appendChild(div);
 }
 
