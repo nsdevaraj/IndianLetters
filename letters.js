@@ -101,7 +101,7 @@ function addButton(n) {
     padding: 5,
     fill: 'white'
   }));
-  button.on('click', () => {
+  button.on('click touchend', () => {
     consonant = consonants[n];
     alert('selected consonant : ' + consonant);
   })
