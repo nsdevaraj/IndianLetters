@@ -12,6 +12,20 @@
         overflow: hidden;
         background-color: #110000;
       }
+      select {
+        margin-bottom: 1em;
+        padding: 0.25em;
+        border: 0;
+        border-bottom: 2px solid currentcolor;
+        font-weight: bold;
+        letter-spacing: 0.15em;
+        border-radius: 0;
+        &:focus,
+        &:active {
+          outline: 0;
+          border-bottom-color: red;
+        }
+      } 
       .wrapper {
         display: grid;
         grid-template-columns: repeat(18, 1fr);
@@ -20,9 +34,9 @@
       .btn {
         height: 30px;
         line-height: 20px;
-        width: 30px; 
+        width: 30px;
         border-radius: 50%;
-        background-color: #c8a119; 
+        background-color: #c8a119;
         text-align: center;
         cursor: pointer;
       }
@@ -31,17 +45,17 @@
 
   <body>
     <div class="wrapper" id="consonDiv"></div>
-    <select name="langs" id="currentLanguage" onchange="setCurrentLang(this)">
-      <option value="0">Tamil</option>
-      <option value="1">Telugu</option>
-      <option value="2">Kannada</option>
-      <option value="6">Malayalam</option>
-      <option value="9">Oriya</option>
-      <option value="3">Bengali</option>
-      <option value="5">Punjabi</option>
-      <option value="7">Gujarati</option>
-      <option value="4">Hindi</option>
-      <option value="8">Sinhala</option>
+    <select class="center" name="langs" id="currentLanguage" onchange="setCurrentLang(this)">
+      <option value="0">தமிழ்</option>
+      <option value="1">తెలుగు</option>
+      <option value="2">ಕನ್ನಡ</option>
+      <option value="6">മലയാളം</option>
+      <option value="9">ଘୃଣା କରନ୍ତି</option>
+      <option value="3">বাংলা</option>
+      <option value="5">ਗੁਰਮੁਖੀ</option>
+      <option value="7">ગુજરાતી</option>
+      <option value="4">हिंदी</option>
+      <option value="8">සිංහල</option>
     </select>
     <div id="container"></div>
     <script>
