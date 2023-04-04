@@ -33,8 +33,7 @@ var consonantLangs = [[['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 
 [['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍'],['k', 'kh', 'ga', 'gh', 'n', 'ch', 'chh', 'ja', 'jh', 'n', 't', 'th', 'd', 'dh', 'n', 't', 'th', 'd', 'dh', 'n', 'p', 'f', 'b', 'bh', 'm', 'ya', 'y', 'r', 'l', 'l', 'w', 'sh', 'sh', 's', 'h']]
 ]
 var vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign, consonantPhs, vowelLetterPhs, consonantPh, vowelLetterPh, consonantIndex;
-var width;
-var height;
+var width, height, centerText ;
 var currentLang = 0;
 var prevletter;
 Konva.angleDeg = false;
@@ -202,7 +201,7 @@ function animate(frame) {
         consonantPh= consonantPhs[consonantIndex];
         vowelLetterPh= vowelLetterPhs[vowelIndex];
         speak(consonantPh+ "+" +vowelLetterPh );
-        alert(consonant + " + " + vowelLetter + " = " + consonant + vowelSign)
+        centerText.text( consonant + vowelSign)
       }
       finished = true;
     }
@@ -268,9 +267,30 @@ function init() {
     addWedge(n);
   }
   setPointer();
+
+  var circle = new Konva.Circle({
+    x: stage.width() / 2,
+    y: stage.height() / 2 -50,
+    radius: 120,
+    fill: '#670000',
+    stroke: 'black',
+    strokeWidth: 1,
+  });
+  centerText = new Konva.Text({
+    text: consonant,
+    fontFamily: "Calibri",
+    fontSize: 50,
+    fill: "white",
+    align: "center", 
+    x: stage.width() / 2 -20,
+    y: stage.height() / 2 -80,
+    listening: false,
+  });
   // add components to the stage
   layer.add(wheel);
   layer.add(pointer);
+  layer.add(circle);
+  layer.add(centerText);
   stage.add(layer); 
   // bind events
   wheel.on("mousedown touchstart", function (evt) {
