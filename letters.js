@@ -153,7 +153,7 @@ function addWedge(n) {
   wedge.startRotation = wedge.rotation();
   wheel.add(wedge);
 }
-
+ 
 function animate(frame) {
   // handle wheel spin
   var angularVelocityChange =
@@ -161,8 +161,8 @@ function animate(frame) {
   angularVelocity -= angularVelocityChange;
   // activate / deactivate wedges based on point intersection
   var shape = stage.getIntersection({
-    x: stage.width() / 2,
-    y: 100, // length to detect collision
+    x: stage.width()*3/4-20,
+    y: stage.height()/2-100, // length to detect collision
   });
   if (controlled) {
     if (angularVelocities.length > 10) {
@@ -188,11 +188,11 @@ function animate(frame) {
   lastRotation = wheel.rotation();
   if (shape) {
     if (shape && (!activeWedge || shape._id !== activeWedge._id)) {
-      pointer.y(10);
+      pointer.y(stage.height()/2-90);
       new Konva.Tween({
         node: pointer,
         duration: 0.3,
-        y: 15,
+        y: stage.height()/2-92,
         easing: Konva.Easings.ElasticEaseOut,
       }).play();
       if (activeWedge) {
@@ -216,9 +216,9 @@ function setPointer(){
     lineJoin: "round",
     angle: 1,
     radius: 30,
-    x: stage.width() / 2,
-    y: 20,
-    rotation: -90,
+    x: stage.width()*3/4-20,
+    y: stage.height()/2-100,
+    rotation: 200,
     shadowColor: "black",
     shadowOffsetX: 3,
     shadowOffsetY: 3,
