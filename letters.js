@@ -32,17 +32,11 @@ var consonantLangs = [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', '
 ['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],
 ['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍']
 ]
-var vowelLetters;
-var vowelSigns;
-var consonants;
-var consonant;
-var vowelLetter;
-var vowelSign;
-
+var vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign;
 var width;
 var height;
-var currentLang = 0
-var prevletter 
+var currentLang = 0;
+var prevletter;
 Konva.angleDeg = false;
 var angularVelocity = 6;
 var angularVelocities = [];
@@ -96,7 +90,7 @@ function selectConsonant(letter){
 }
 
 function addWedge(n) {
-  var reward = vowelLetters[n];
+  var vowel = vowelLetters[n];
   var circleRadius= stage.width()/4
   var innerCircleRadius = circleRadius - circleRadius/4
   var angle = (2 * Math.PI) / numWedges;
@@ -142,7 +136,7 @@ function addWedge(n) {
   });
   wedge.add(wedgeBackground);// 2nd inner circle 
   var text = new Konva.Text({
-    text: reward,
+    text: vowel,
     fontFamily: "Calibri",
     fontSize: 30,
     fill: "white",
@@ -210,24 +204,7 @@ function animate(frame) {
   }
 }
 
-function init() {
-  assignLanguage();
-  stage = new Konva.Stage({
-    container: "container",
-    width: width,
-    height: height,
-  });
-  layer = new Konva.Layer();
-  wheel = new Konva.Group({
-    x: stage.width() / 2,
-    y: stage.height() / 2 - 50,
-  });
-  for (var n = 0; n < consonants.length; n++) {
-    addButton(n);
-  }
-  for (var n = 0; n < numWedges; n++) {
-    addWedge(n);
-  }
+function setPointer(){
   pointer = new Konva.Wedge({
     fillRadialGradientStartPoint: 0,
     fillRadialGradientStartRadius: 0,
@@ -248,6 +225,27 @@ function init() {
     shadowBlur: 2,
     shadowOpacity: 0.5,
   }); 
+}
+
+function init() {
+  assignLanguage();
+  stage = new Konva.Stage({
+    container: "container",
+    width: width,
+    height: height,
+  });
+  layer = new Konva.Layer();
+  wheel = new Konva.Group({
+    x: stage.width() / 2,
+    y: stage.height() / 2 - 50,
+  });
+  for (var n = 0; n < consonants.length; n++) {
+    addButton(n);
+  }
+  for (var n = 0; n < numWedges; n++) {
+    addWedge(n);
+  }
+  setPointer();
   // add components to the stage
   layer.add(wheel);
   layer.add(pointer);
@@ -273,8 +271,7 @@ function init() {
       angularVelocities = [];
     },
     false
-  );
-
+  ); 
   stage.addEventListener(
     "mousemove touchmove",
     function (evt) {
@@ -297,6 +294,7 @@ function init() {
     anim.start();
   }, 500);
 }
+
 window.onresize = function (event) { 
   init();
 };
