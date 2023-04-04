@@ -54,6 +54,7 @@ var target, activeWedge, stage, layer, wheel, pointer;
 var finished = false;
 
 function assignLanguage() {
+  document.getElementById('consonDiv').innerHTML = '';
   width = window.innerWidth;
   height = window.innerHeight; 
   vowelLetters = vowelLetterLangs[currentLang];
@@ -63,50 +64,29 @@ function assignLanguage() {
   vowelLetter = vowelLetters[0];
   numWedges = vowelLetters.length
 }
+
 function getAverageAngularVelocity() {
   var total = 0;
-  var len = angularVelocities.length;
-
+  var len = angularVelocities.length; 
   if (len === 0) {
     return 0;
-  }
-
+  } 
   for (var n = 0; n < len; n++) {
     total += angularVelocities[n];
-  }
-
+  } 
   return total / len;
 }
 
-function addButton(n) {
-  var nextLine = n / 18 > 1 ? 1 : 0;
-  var buttonX = nextLine ? stage.width() / 6 + (n - 18) * 80 + 20 : stage.width() / 6 + n * 80 + 20;
-  var buttonY = 20 + nextLine * 40;
-  var button = new Konva.Label({
-    x: buttonX,
-    y: buttonY,
-    opacity: 0.75
-  });
-  layer.add(button);
-  button.add(new Konva.Tag({
-    fill: 'black',
-    lineJoin: 'round',
-    shadowColor: 'black',
-    shadowBlur: 10,
-    shadowOffset: 10,
-    shadowOpacity: 0.5
-  }));
-  button.add(new Konva.Text({
-    text: consonants[n],
-    fontFamily: 'Calibri',
-    fontSize: 20,
-    padding: 5,
-    fill: 'white'
-  }));
-  button.on('click touchend', () => {
-    consonant = consonants[n];
-    alert('selected consonant : ' + consonant);
-  })
+function addButton(n) { 
+  const div = document.createElement('div'); 
+  div.className = 'letter';  
+  div.innerHTML =`<input type="button" value="`+consonants[n]+`" onclick="selectConsonant(this)" />`
+  document.getElementById('consonDiv').appendChild(div);
+}
+
+function selectConsonant(letter){ 
+  consonant = letter.value;
+  alert('selected consonant : ' + letter.value);
 }
 
 function addWedge(n) {
@@ -173,6 +153,7 @@ function addWedge(n) {
   wedge.startRotation = wedge.rotation();
   wheel.add(wedge);
 }
+
 function animate(frame) {
   // handle wheel spin
   var angularVelocityChange =
@@ -222,6 +203,7 @@ function animate(frame) {
     }
   }
 }
+
 function init() {
   assignLanguage();
   stage = new Konva.Stage({
@@ -259,13 +241,11 @@ function init() {
     shadowOffsetY: 3,
     shadowBlur: 2,
     shadowOpacity: 0.5,
-  });
-
+  }); 
   // add components to the stage
   layer.add(wheel);
   layer.add(pointer);
-  stage.add(layer);
-
+  stage.add(layer); 
   // bind events
   wheel.on("mousedown touchstart", function (evt) {
     angularVelocity = 0;
@@ -278,14 +258,12 @@ function init() {
     "mouseup touchend",
     function () {
       controlled = false;
-      angularVelocity = getAverageAngularVelocity() * 5;
-
+      angularVelocity = getAverageAngularVelocity() * 5; 
       if (angularVelocity > 20) {
         angularVelocity = 20;
       } else if (angularVelocity < -20) {
         angularVelocity = -20;
-      }
-
+      } 
       angularVelocities = [];
     },
     false
