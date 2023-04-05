@@ -46,6 +46,7 @@ var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
 var meyEzuthu='்'
 var finished = false;
+/*
 // Initialize new SpeechSynthesisUtterance object
 var speech = new SpeechSynthesisUtterance();
 // Set Speech Language
@@ -56,7 +57,7 @@ speech.rate = speech.volume = speech.pitch = 1;
 voices = window.speechSynthesis.getVoices();
 // Initially set the First Voice in the Array.
 speech.voice = voices[0];
-
+*/
 function assignLanguage() {
   document.getElementById('consonDiv').innerHTML = '';
   width = window.innerWidth;
@@ -168,8 +169,8 @@ function addWedge(n) {
   wheel.add(wedge);
 }
 function speak(text){
-  speech.text = text
-  window.speechSynthesis.speak(speech);
+  //speech.text = text
+  //window.speechSynthesis.speak(speech);
 } 
 function animate(frame) {
   // handle wheel spin
