@@ -22,8 +22,8 @@ function assignLanguage() {
   consonantPhs = consonantLangs[currentLang][1];
   vowelLetterPhs = vowelLetterLangs[currentLang][1];
   consonant = consonants[0];
-  consonantIndex = 0;
   vowelLetter = vowelLetters[0];
+  consonantIndex = 0;
   numWedges = vowelLetters.length;
 }
 
@@ -53,6 +53,7 @@ function addButton(n) {
 function selectConsonant(letter){  
   consonantIndex = parseInt(letter.id)
   consonant = letter.value;
+  showResult()
   if(prevletter)prevletter.style.backgroundColor= "#c8a119"
   letter.style.backgroundColor = "#88a119";
   prevletter = letter; 
@@ -151,12 +152,7 @@ function animate(frame) {
       if (shape) {
         var text = shape.getParent().findOne("Text").text();
         vowelLetter = text;
-        var vowelIndex = vowelLetters.indexOf(vowelLetter)
-        vowelSign = vowelSigns[vowelIndex]; 
-        consonantPh= consonantPhs[consonantIndex];
-        vowelLetterPh= vowelLetterPhs[vowelIndex];
-        speak(consonantPh+ "+" +vowelLetterPh );
-        centerText.text( consonant + vowelSign)
+        showResult();
       }
       finished = true;
     }
@@ -178,6 +174,15 @@ function animate(frame) {
       activeWedge = shape;
     }
   }
+}
+
+function showResult(){
+  var vowelIndex = vowelLetters.indexOf(vowelLetter)
+  vowelSign = vowelSigns[vowelIndex]; 
+  consonantPh= consonantPhs[consonantIndex];
+  vowelLetterPh= vowelLetterPhs[vowelIndex];
+  speak(consonantPh+ "+" +vowelLetterPh );
+  centerText.text( consonant + vowelSign)
 }
 
 function setPointer(){
