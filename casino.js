@@ -147,9 +147,11 @@ function speak(letter1, letter2, conIndex, vowIndex) {
 
   }
 }
+
 function playAudio(text) {
-  new Audio("audio/" + text + ".mp3").play()
+  new Audio("audio/"+lang[currentLang] +"/"+ text + ".mp3").play()
 }
+
 function animate(frame) {
   // handle wheel spin
   var angularVelocityChange =
