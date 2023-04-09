@@ -25,7 +25,17 @@ function assignLanguage() {
   vowelLetter = vowelLetters[0];
   consonantIndex = 0;
   numWedges = vowelLetters.length;
-  currentLang ==0? meyEzuthu = '்':meyEzuthu=''
+  switch (currentLang) {
+    case 0:
+      meyEzuthu = '்'
+      break;
+    case 1:
+      meyEzuthu = '్'
+      break;
+    default:
+      meyEzuthu = ''
+      break;
+  } 
 }
 
 function getAverageAngularVelocity() {
@@ -43,7 +53,7 @@ function getAverageAngularVelocity() {
 function addButton(n) {
   const div = document.createElement('div');
   div.className = 'letter';
-  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n]+meyEzuthu + `" onclick="selectConsonant(this)"  />`
+  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n] + meyEzuthu + `" onclick="selectConsonant(this)"  />`
   document.getElementById('consonDiv').appendChild(div);
   if (n == 0) {
     prevletter = div.childNodes[0];
@@ -53,7 +63,7 @@ function addButton(n) {
 
 function selectConsonant(letter) {
   consonantIndex = parseInt(letter.id)
-  consonant =consonants[consonantIndex]
+  consonant = consonants[consonantIndex]
   showResult()
   if (prevletter) prevletter.style.backgroundColor = "#c8a119"
   letter.style.backgroundColor = "#88a119";
@@ -125,7 +135,7 @@ function addWedge(n) {
   wheel.add(wedge);
 }
 function speak(letter1, letter2, conIndex, vowIndex) {
-  if (currentLang != 0) {
+  if (currentLang != 0 && currentLang != 1) {
     var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
     window.speechSynthesis.speak(msg);
   } else {
@@ -315,6 +325,6 @@ window.onresize = function (event) {
 };
 
 function setCurrentLang(dropdown) {
-  currentLang = dropdown.value;
+  currentLang = parseInt(dropdown.value);
   init();
 }
