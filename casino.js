@@ -149,6 +149,7 @@ function speak(letter1, letter2, conIndex, vowIndex) {
     vowelLetter = vowelLetters[vowIndex];
     vowelSignLetter = vowelSigns[vowIndex];
     mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter
+    console.log(mixedText)
     playAudio(mixedText)
 
   }
