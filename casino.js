@@ -25,6 +25,7 @@ function assignLanguage() {
   vowelLetter = vowelLetters[0];
   consonantIndex = 0;
   numWedges = vowelLetters.length;
+  currentLang ==0? meyEzuthu = '்':meyEzuthu=''
 }
 
 function getAverageAngularVelocity() {
@@ -42,7 +43,7 @@ function getAverageAngularVelocity() {
 function addButton(n) {
   const div = document.createElement('div');
   div.className = 'letter';
-  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n] + `" onclick="selectConsonant(this)"  />`
+  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n]+meyEzuthu + `" onclick="selectConsonant(this)"  />`
   document.getElementById('consonDiv').appendChild(div);
   if (n == 0) {
     prevletter = div.childNodes[0];
@@ -52,7 +53,7 @@ function addButton(n) {
 
 function selectConsonant(letter) {
   consonantIndex = parseInt(letter.id)
-  consonant = letter.value;
+  consonant =consonants[consonantIndex]
   showResult()
   if (prevletter) prevletter.style.backgroundColor = "#c8a119"
   letter.style.backgroundColor = "#88a119";
@@ -131,7 +132,7 @@ function speak(letter1, letter2, conIndex, vowIndex) {
     consonantLetter = consonants[conIndex];
     vowelLetter = vowelLetters[vowIndex];
     vowelSignLetter = vowelSigns[vowIndex];
-    mixedText = consonantLetter + '்' + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter
+    mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter
     playAudio(mixedText)
 
   }
