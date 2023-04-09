@@ -26,8 +26,7 @@ const convertTextToSpeech = async (text, lang) => {
             text
         },
         voice: {
-            languageCode: "ta-IN",
-            name: "ta-IN-Standard-D"
+            languageCode: "kn"
         }
     }
 
