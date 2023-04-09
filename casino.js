@@ -32,10 +32,14 @@ function assignLanguage() {
     case 1:
       meyEzuthu = '్'
       break;
+    case 2:
+      meyEzuthu = '್'
+      break;
+
     default:
       meyEzuthu = ''
       break;
-  } 
+  }
 }
 
 function getAverageAngularVelocity() {
@@ -135,7 +139,7 @@ function addWedge(n) {
   wheel.add(wedge);
 }
 function speak(letter1, letter2, conIndex, vowIndex) {
-  if (currentLang != 0 && currentLang != 1) {
+  if (currentLang >2) {
     var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
     window.speechSynthesis.speak(msg);
   } else {
@@ -149,7 +153,7 @@ function speak(letter1, letter2, conIndex, vowIndex) {
 }
 
 function playAudio(text) {
-  new Audio("audio/"+lang[currentLang] +"/"+ text + ".mp3").play()
+  new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3").play()
 }
 
 function animate(frame) {
