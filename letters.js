@@ -1,4 +1,4 @@
-var lang=["தமிழ்", "తెలుగు", "ಕನ್ನಡ", "বাংলা","Hindi","Punjabi","മലയാളം","Gujarati","Sinhala"]
+var lang=["தமிழ்", "తెలుగు", "ಕನ್ನಡ", "বাংলা","हिंदी","Punjabi","മലയാളം","Gujarati","Sinhala"]
 var vowelLetterLangs = [// "Tamil"
   [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'],
   ['a', 'ah', 'i', 'e', 'u', 'ooh', 'a', 'a', 'eye', 'o', 'oh', 'au']],
