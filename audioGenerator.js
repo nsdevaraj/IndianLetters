@@ -49,7 +49,7 @@ const saveAudio = async () => {
             letterConf.vowels.forEach((vowel, vowelIndex) => {
                 const combinationIndex = (consonantIndex * letterConf.vowels.length) + vowelIndex;
                 const combination = letterConf.combinations[combinationIndex]
-                const text = `${consonant} plus ${vowel}. ${combination.text}`
+                const text = `${consonant} plus ${vowel}. ${combination}`
                 promises.push(convertTextToSpeech(text, letterConf.lang));
             });
         });
