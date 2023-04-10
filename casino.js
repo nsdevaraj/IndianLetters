@@ -10,7 +10,8 @@ var controlled = false;
 var numWedges = vowelLetterLangs[0].length;
 var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
-var meyEzuthu = '்'
+var meyEzuthu = '்';
+var centerX;
 var finished = false;
 function assignLanguage() {
   document.getElementById('consonDiv').innerHTML = '';
@@ -160,8 +161,7 @@ function speak(letter1, letter2, conIndex, vowIndex) {
     consonantLetter = consonants[conIndex];
     vowelLetter = vowelLetters[vowIndex];
     vowelSignLetter = vowelSigns[vowIndex];
-    mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter
-    console.log(mixedText)
+    mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter;
     playAudio(mixedText)
 
   }
@@ -225,8 +225,10 @@ function showResult() {
   vowelSign = vowelSigns[vowelIndex];
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
-  speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex);
+  speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex); 
   centerText.text(consonant + vowelSign) 
+  (centerText.textWidth > 50) ? centerText.setX(centerX -centerText.textWidth/4):centerText.setX(centerX);
+  stage.draw();
 }
 
 function setPointer() {
@@ -280,13 +282,14 @@ function init() {
     stroke: 'black',
     strokeWidth: 1,
   });
+  centerX = stage.width() / 2 - 20;
   centerText = new Konva.Text({
     text: consonant,
     fontFamily: "Calibri",
     fontSize: 50,
     fill: "white",
     align: "center",
-    x: stage.width() / 2 - 30,
+    x: centerX,
     y: stage.height() / 2 - 80,
     listening: false,
   });
