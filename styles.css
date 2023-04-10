@@ -21,13 +21,13 @@ select {
 .wrapper {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(2, 30px);
+  grid-template-rows: repeat(2, 70px);
 }
 .btn {
-  height: 30px;
+  height: 60px;
   line-height: 20px;
-  width: 30px;
-  font-size: 1.2em;
+  width: 70px;
+  font-size: 2em;
   border-radius: 50%;
   background-color: #c8a119;
   text-align: center;

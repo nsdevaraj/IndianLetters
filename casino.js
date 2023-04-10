@@ -90,8 +90,8 @@ function selectConsonant(letter) {
 
 function addWedge(n) {
   var vowel = vowelLetters[n];
-  var circleRadius = stage.width() / 5
-  var innerCircleRadius = circleRadius - circleRadius / 4
+  var circleRadius = stage.width() / 6
+  var innerCircleRadius = circleRadius - circleRadius / 5
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
@@ -178,7 +178,7 @@ function animate(frame) {
   angularVelocity -= angularVelocityChange;
   // activate / deactivate wedges based on point intersection
   var shape = stage.getIntersection({
-    x: stage.width() * 0.7 - 20,
+    x: stage.width() * 0.6 + 100,
     y: stage.height() / 2 - 100, // length to detect collision
   });
   if (controlled) {
@@ -226,7 +226,7 @@ function showResult() {
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
   speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex);
-  centerText.text(consonant + vowelSign)
+  centerText.text(consonant + vowelSign) 
 }
 
 function setPointer() {
@@ -241,7 +241,7 @@ function setPointer() {
     lineJoin: "round",
     angle: 1,
     radius: 30,
-    x: stage.width() * 0.7 - 20,
+    x: stage.width() * 0.6 + 100,
     y: stage.height() / 2 - 100,
     rotation: 200,
     shadowColor: "black",
@@ -286,7 +286,7 @@ function init() {
     fontSize: 50,
     fill: "white",
     align: "center",
-    x: stage.width() / 2 - 20,
+    x: stage.width() / 2 - 30,
     y: stage.height() / 2 - 80,
     listening: false,
   });
