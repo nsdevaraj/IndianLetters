@@ -13,6 +13,7 @@ var target, activeWedge, stage, layer, wheel, pointer;
 var meyEzuthu = '்';
 var centerX;
 var finished = false;
+
 function assignLanguage() {
   document.getElementById('consonDiv').innerHTML = '';
   width = window.innerWidth;
@@ -153,6 +154,7 @@ function addWedge(n) {
   wedge.startRotation = wedge.rotation();
   wheel.add(wedge);
 }
+
 function speak(letter1, letter2, conIndex, vowIndex) {
   if (currentLang > 7) {
     var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
@@ -236,13 +238,13 @@ function setPointer() {
     fillRadialGradientStartPoint: 0,
     fillRadialGradientStartRadius: 0,
     fillRadialGradientEndPoint: 0,
-    fillRadialGradientEndRadius: 30,
+    fillRadialGradientEndRadius: 25,
     fillRadialGradientColorStops: [0, "#885500", 1, "#443300"],
     stroke: "white",
     strokeWidth: 2,
     lineJoin: "round",
     angle: 1,
-    radius: 30,
+    radius: 25,
     x: stage.width() * 0.6 + 100,
     y: stage.height() / 2 - 100,
     rotation: 200,
