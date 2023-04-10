@@ -43,16 +43,16 @@ function assignLanguage() {
     case 4:
       meyEzuthu = '्'
       break;
-      case 5:
-        meyEzuthu = '੍'
-        break;
-      case 6:
-        meyEzuthu = '്'
-        break;
-      case 7:
-        meyEzuthu = '્'
-        break;
-     default:
+    case 5:
+      meyEzuthu = '੍'
+      break;
+    case 6:
+      meyEzuthu = '്'
+      break;
+    case 7:
+      meyEzuthu = '્'
+      break;
+    default:
       meyEzuthu = ''
       break;
   }
@@ -170,7 +170,9 @@ function speak(letter1, letter2, conIndex, vowIndex) {
 }
 
 function playAudio(text) {
-  new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3").play()
+  var announce = new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3");
+  announce.playbackRate=0.8;
+  announce.play()
 }
 
 function animate(frame) {
@@ -228,7 +230,7 @@ function showResult() {
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
   speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex);
-  centerText.text(consonant + vowelSign)
+  centerText.text(consonant + vowelSign) 
 }
 
 function setPointer() {
@@ -282,13 +284,14 @@ function init() {
     stroke: 'black',
     strokeWidth: 1,
   });
+  centerX = stage.width() / 2 - 25;
   centerText = new Konva.Text({
     text: consonant,
     fontFamily: "Calibri",
-    fontSize: 50,
+    fontSize: 40,
     fill: "white",
     align: "center",
-    x: stage.width() / 2 - 20,
+    x: centerX,
     y: stage.height() / 2 - 80,
     listening: false,
   });
@@ -305,7 +308,15 @@ function init() {
     target = evt.target;
     finished = false;
   });
-  // add listeners to container
+  bindEvents();
+  var anim = new Konva.Animation(animate, layer);
+  setTimeout(function () {
+    anim.start();
+  }, 500);
+}
+
+// add listeners to container
+function bindEvents() {
   stage.addEventListener(
     "mouseup touchend",
     function () {
@@ -337,12 +348,7 @@ function init() {
     },
     false
   );
-  var anim = new Konva.Animation(animate, layer);
-  setTimeout(function () {
-    anim.start();
-  }, 500);
 }
-
 window.onresize = function (event) {
   init();
 };
