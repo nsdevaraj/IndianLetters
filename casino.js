@@ -43,16 +43,16 @@ function assignLanguage() {
     case 4:
       meyEzuthu = '्'
       break;
-    case 5:
-      meyEzuthu = '੍'
-      break;
-    case 6:
-      meyEzuthu = '്'
-      break;
-    case 7:
-      meyEzuthu = '્'
-      break;
-    default:
+      case 5:
+        meyEzuthu = '੍'
+        break;
+      case 6:
+        meyEzuthu = '്'
+        break;
+      case 7:
+        meyEzuthu = '્'
+        break;
+     default:
       meyEzuthu = ''
       break;
   }
@@ -227,10 +227,8 @@ function showResult() {
   vowelSign = vowelSigns[vowelIndex];
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
-  speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex); 
-  centerText.text(consonant + vowelSign) 
-  (centerText.textWidth > 50) ? centerText.setX(centerX -centerText.textWidth/4):centerText.setX(centerX);
-  stage.draw();
+  speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex);
+  centerText.text(consonant + vowelSign)
 }
 
 function setPointer() {
@@ -284,14 +282,13 @@ function init() {
     stroke: 'black',
     strokeWidth: 1,
   });
-  centerX = stage.width() / 2 - 20;
   centerText = new Konva.Text({
     text: consonant,
     fontFamily: "Calibri",
     fontSize: 50,
     fill: "white",
     align: "center",
-    x: centerX,
+    x: stage.width() / 2 - 20,
     y: stage.height() / 2 - 80,
     listening: false,
   });
