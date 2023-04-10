@@ -43,9 +43,12 @@ function assignLanguage() {
       break;
     case 5:
       meyEzuthu = '੍'
-      break; 
+      break;
     case 6:
       meyEzuthu = '്'
+      break;
+    case 7:
+      meyEzuthu = '્'
       break;
     default:
       meyEzuthu = ''
@@ -150,7 +153,7 @@ function addWedge(n) {
   wheel.add(wedge);
 }
 function speak(letter1, letter2, conIndex, vowIndex) {
-  if (currentLang > 5) {
+  if (currentLang > 7) {
     var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
     window.speechSynthesis.speak(msg);
   } else {
