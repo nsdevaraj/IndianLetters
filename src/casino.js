@@ -139,6 +139,14 @@ function addWedge(n) {
     strokeWidth: 1,
   });
   wedge.add(wedgeBackground);// 2nd inner circle 
+  var wedgeBackground = new Konva.Wedge({
+    radius: (circleRadius / 4),
+    angle: angle,
+    fill: "#670000", 
+    stroke: "#670000",
+    strokeWidth: 3,
+  });
+  wedge.add(wedgeBackground);// 3rd inner circle 
   var text = new Konva.Text({
     text: vowel,
     fontFamily: "Calibri",
@@ -277,15 +285,8 @@ function init() {
   for (var n = 0; n < numWedges; n++) {
     addWedge(n);
   }
+
   setPointer();
-  var circle = new Konva.Circle({
-    x: stage.width() / 2,
-    y: stage.height() / 2 - 50,
-    radius: 120,
-    fill: '#670000',
-    stroke: 'black',
-    strokeWidth: 1,
-  });
   centerX = stage.width() / 2 - 25;
   centerText = new Konva.Text({
     text: consonant,
@@ -296,20 +297,13 @@ function init() {
     x: centerX,
     y: stage.height() / 2 - 80,
     listening: false,
-  });
+  }); 
   // add components to the stage
   layer.add(wheel);
-  layer.add(pointer);
-  layer.add(circle);
+  layer.add(pointer);  
   layer.add(centerText);
   stage.add(layer);
   // bind events
-  wheel.on("mousedown touchstart", function (evt) {
-    angularVelocity = 0;
-    controlled = true;
-    target = evt.target;
-    finished = false;
-  });
   bindEvents();
   var anim = new Konva.Animation(animate, layer);
   setTimeout(function () {
@@ -319,7 +313,14 @@ function init() {
 }
 
 // add listeners to container
-function bindEvents() {
+function bindEvents() { 
+  wheel.on("mousedown touchstart", function (evt) {
+    angularVelocity = 0;
+    controlled = true;
+    target = evt.target;
+    finished = false;
+  });
+
   stage.addEventListener(
     "mouseup touchend",
     function () {
