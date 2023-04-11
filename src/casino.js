@@ -52,6 +52,9 @@ function assignLanguage() {
     case 7:
       meyEzuthu = '્'
       break;
+    case 8:
+      meyEzuthu = 'ฺ'
+      break;
     default:
       meyEzuthu = ''
       break;
@@ -156,7 +159,7 @@ function addWedge(n) {
 }
 
 function speak(letter1, letter2, conIndex, vowIndex) {
-  if (currentLang > 7) {
+  if (currentLang > 8) {
     var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
     window.speechSynthesis.speak(msg);
   } else {
@@ -171,7 +174,7 @@ function speak(letter1, letter2, conIndex, vowIndex) {
 
 function playAudio(text) {
   var announce = new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3");
-  announce.playbackRate=0.8;
+  announce.playbackRate = 0.8;
   announce.play()
 }
 
@@ -230,7 +233,7 @@ function showResult() {
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
   speak(consonantPh, vowelLetterPh, consonantIndex, vowelIndex);
-  centerText.text(consonant + vowelSign) 
+  centerText.text(consonant + vowelSign)
 }
 
 function setPointer() {
