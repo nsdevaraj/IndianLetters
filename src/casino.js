@@ -96,7 +96,7 @@ function selectConsonant(letter) {
 function addWedge(n) {
   var vowel = vowelLetters[n];
   var circleRadius = stage.width() / 6 +50
-  var innerCircleRadius = circleRadius - circleRadius / 5 +20
+  var innerCircleRadius = circleRadius - circleRadius / 5 
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
@@ -132,7 +132,7 @@ function addWedge(n) {
   });
   wedge.add(wedgeBackground);// 1st inner circle 
   var wedgeBackground = new Konva.Wedge({
-    radius: (circleRadius / 2) + 20,
+    radius: (circleRadius / 2) + 50,
     angle: angle,
     fill: "#443344",
     stroke: "#ccc",
