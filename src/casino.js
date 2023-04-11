@@ -352,8 +352,12 @@ function bindEvents() {
     false
   );
 }
+var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1]; 
+//if(urlVal.length>0)  document.getElementById('selectLanguage').value = urlVal 
+//http://127.0.0.1:8080/?l=8
 window.onresize = function (event) {
   init();
+  document.getElementById('selectLanguage').value = '5'
 };
 
 function setCurrentLang(dropdown) {
