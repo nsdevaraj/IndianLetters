@@ -95,8 +95,8 @@ function selectConsonant(letter) {
 
 function addWedge(n) {
   var vowel = vowelLetters[n];
-  var circleRadius = stage.width() / 6 +50
-  var innerCircleRadius = circleRadius - circleRadius / 5 
+  var circleRadius = stage.width() / 6 + 50
+  var innerCircleRadius = circleRadius - circleRadius / 5
   var angle = (2 * Math.PI) / numWedges;
   var wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
@@ -142,7 +142,7 @@ function addWedge(n) {
   var wedgeBackground = new Konva.Wedge({
     radius: (circleRadius / 4),
     angle: angle,
-    fill: "#670000", 
+    fill: "#670000",
     stroke: "#670000",
     strokeWidth: 3,
   });
@@ -297,23 +297,22 @@ function init() {
     x: centerX,
     y: stage.height() / 2 - 80,
     listening: false,
-  }); 
+  });
   // add components to the stage
   layer.add(wheel);
-  layer.add(pointer);  
+  layer.add(pointer);
   layer.add(centerText);
   stage.add(layer);
   // bind events
   bindEvents();
   var anim = new Konva.Animation(animate, layer);
   setTimeout(function () {
-    dropDwn = document.getElementById('selectLanguage');
     anim.start();
   }, 500);
 }
 
 // add listeners to container
-function bindEvents() { 
+function bindEvents() {
   wheel.on("mousedown touchstart", function (evt) {
     angularVelocity = 0;
     controlled = true;
@@ -353,9 +352,17 @@ function bindEvents() {
     false
   );
 }
-var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1]; 
-if(urlVal.length>0) {setTimeout(dropDwn.selectedIndex = parseInt(urlVal),1000)}
-//http://192.168.29.223:8082/?l=8
+
+// langIndex /?l=8
+var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1];
+if (urlVal.length > 0) {
+  setTimeout(function () {
+    dropDwn = document.getElementById('selectLanguage');
+    dropDwn.selectedIndex = parseInt(urlVal);
+    setCurrentLang(dropDwn);
+  }), 100
+}
+
 window.onresize = function (event) {
   init();
   document.getElementById('selectLanguage').value = '5'
