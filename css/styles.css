@@ -14,7 +14,8 @@ select {
   border-radius: 0;
   &:focus,
   &:active {
-    outline: 0;
+    outline: 2px solid white;
+    outline-offset: 2px;
     border-bottom-color: red;
   }
 }
@@ -32,4 +33,11 @@ select {
   background-color: #c8a119;
   text-align: center;
   cursor: pointer;
+}
+.center {
+  text-align: center;
+}
+.btn:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 2px;
 }
