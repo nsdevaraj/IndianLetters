@@ -365,7 +365,6 @@ if (urlVal.length > 0) {
 
 window.onresize = function (event) {
   init();
-  document.getElementById('selectLanguage').value = '5'
 };
 
 function setCurrentLang(dropdown) {

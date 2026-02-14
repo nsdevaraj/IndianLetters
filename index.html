@@ -10,9 +10,11 @@
   </head> 
   <body>
     <div class="wrapper" id="consonDiv"></div>
-    <select class="center" name="langs" id="selectLanguage" onchange="setCurrentLang(this)">
-      <option value="0">தமிழ் - Tamil</option>
-      <option value="1">తెలుగు - Telugu</option>
+    <div class="center">
+      <label for="selectLanguage" style="color: white; margin-right: 10px;">Choose Language: </label>
+      <select name="langs" id="selectLanguage" onchange="setCurrentLang(this)">
+        <option value="0">தமிழ் - Tamil</option>
+        <option value="1">తెలుగు - Telugu</option>
       <option value="2">ಕನ್ನಡ - Kannada</option>
       <option value="6">മലയാളം - Malayalam</option>
       <option value="3">বাংলা - Bengali</option>
@@ -23,6 +25,7 @@
       <option value="9">සිංහල - Sinhala</option>
       <!--  <option value="9">ଘୃଣା କରନ୍ତି</option> -->
     </select>
+    </div>
     <div id="container"></div>
     <script>
       init();
