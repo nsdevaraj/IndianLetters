@@ -6,25 +6,30 @@
     <script src="src/casino.js"></script> 
     <meta charset="utf-8" />
     <title>Indian Letters - Casino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
   </head> 
   <body>
-    <div class="wrapper" id="consonDiv"></div>
-    <div class="center">
-      <label for="selectLanguage" style="color: white; margin-right: 10px;">Choose Language: </label>
-      <select name="langs" id="selectLanguage" onchange="setCurrentLang(this)">
-        <option value="0">தமிழ் - Tamil</option>
-        <option value="1">తెలుగు - Telugu</option>
-      <option value="2">ಕನ್ನಡ - Kannada</option>
-      <option value="6">മലയാളം - Malayalam</option>
-      <option value="3">বাংলা - Bengali</option>
-      <option value="5">ਗੁਰਮੁਖੀ - Punjabi</option>
-      <option value="7">ગુજરાતી - Gujarati</option>
-      <option value="4">हिंदी - Hindi</option>
-      <option value="8">ไทย - Thai</option>
-      <option value="9">සිංහල - Sinhala</option>
-      <!--  <option value="9">ଘୃଣା କରନ୍ତି</option> -->
-    </select>
+    <div class="controls-container">
+      <div class="wrapper" id="consonDiv"></div>
+      <div class="center">
+        <label for="selectLanguage">Choose Language: </label>
+        <select name="langs" id="selectLanguage" onchange="setCurrentLang(this)">
+          <option value="0">தமிழ் - Tamil</option>
+          <option value="1">తెలుగు - Telugu</option>
+          <option value="2">ಕನ್ನಡ - Kannada</option>
+          <option value="6">മലയാളം - Malayalam</option>
+          <option value="3">বাংলা - Bengali</option>
+          <option value="5">ਗੁਰਮੁਖੀ - Punjabi</option>
+          <option value="7">ગુજરાતી - Gujarati</option>
+          <option value="4">हिंदी - Hindi</option>
+          <option value="8">ไทย - Thai</option>
+          <option value="9">සිංහල - Sinhala</option>
+          <!--  <option value="9">ଘୃଣା କରନ୍ତି</option> -->
+        </select>
+      </div>
     </div>
     <div id="container"></div>
     <script>

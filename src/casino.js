@@ -101,8 +101,9 @@ function addWedge(n) {
   var wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
   });
-  n % 2 ? startCol = '#ff0000' : startCol = '#660000';
-  n % 2 ? startBgCol = '#980044' : startBgCol = '#7433cc';
+  var colors = ['#C41E3A', '#0F52BA', '#50C878', '#9966CC', '#FFBF00', '#E0115F', '#008080', '#FF7F50'];
+  var startCol = colors[n % colors.length];
+  var startBgCol = colors[(n + 1) % colors.length];
   var wedgeBorderBackground = new Konva.Wedge({
     radius: circleRadius,
     angle: angle,
@@ -149,7 +150,7 @@ function addWedge(n) {
   wedge.add(wedgeBackground);// 3rd inner circle 
   var text = new Konva.Text({
     text: vowel,
-    fontFamily: "Calibri",
+    fontFamily: "Poppins",
     fontSize: 30,
     fill: "white",
     align: "center",
@@ -250,7 +251,7 @@ function setPointer() {
     fillRadialGradientStartRadius: 0,
     fillRadialGradientEndPoint: 0,
     fillRadialGradientEndRadius: 25,
-    fillRadialGradientColorStops: [0, "#885500", 1, "#443300"],
+    fillRadialGradientColorStops: [0, "#ffd700", 1, "#b8860b"],
     stroke: "white",
     strokeWidth: 2,
     lineJoin: "round",
@@ -290,7 +291,7 @@ function init() {
   centerX = stage.width() / 2 - 25;
   centerText = new Konva.Text({
     text: consonant,
-    fontFamily: "Calibri",
+    fontFamily: "Poppins",
     fontSize: 40,
     fill: "white",
     align: "center",
