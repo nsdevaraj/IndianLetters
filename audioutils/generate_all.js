@@ -109,12 +109,32 @@ async function generateAudio() {
 const convertTextToSpeech = async (ssml, languageCode, filepath) => {
     const request = {
         input: { ssml },
-        voice: { languageCode, ssmlGender: 'NEUTRAL' },
+        voice: {
+            languageCode,
+            name: `${languageCode}-Neural2-A`, // Use Neural2 for higher quality "Gen AI" sound
+            ssmlGender: 'FEMALE'
+        },
         audioConfig: { audioEncoding: 'MP3' },
     };
 
-    const [response] = await client.synthesizeSpeech(request);
-    await writeFile(filepath, response.audioContent, 'binary');
+    try {
+        const [response] = await client.synthesizeSpeech(request);
+        await writeFile(filepath, response.audioContent, 'binary');
+    } catch (error) {
+        // Fallback to standard voice if Neural2 is not available for the language
+        if (error.code === 3 || error.message.includes('INVALID_ARGUMENT')) {
+            console.warn(`Neural2 voice not found for ${languageCode}, falling back to standard voice.`);
+            const fallbackRequest = {
+                input: { ssml },
+                voice: { languageCode, ssmlGender: 'FEMALE' },
+                audioConfig: { audioEncoding: 'MP3' },
+            };
+            const [response] = await client.synthesizeSpeech(fallbackRequest);
+            await writeFile(filepath, response.audioContent, 'binary');
+        } else {
+            throw error;
+        }
+    }
 };
 
 generateAudio().catch(console.error);
