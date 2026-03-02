@@ -73,7 +73,8 @@ function getAverageAngularVelocity(velocities) {
   return total / len;
 }
 
-function addButton(n) {
+function addButton(n, consonDiv) {
+  consonDiv = consonDiv || document.getElementById('consonDiv');
   const div = document.createElement('div');
   div.className = 'letter';
   const input = document.createElement('input');
@@ -286,8 +287,9 @@ function init() {
     x: stage.width() / 2,
     y: stage.height() / 2 - 50,
   });
+  const consonDiv = document.getElementById('consonDiv');
   for (var n = 0; n < consonants.length; n++) {
-    addButton(n);
+    addButton(n, consonDiv);
   }
   for (var n = 0; n < numWedges; n++) {
     addWedge(n);
