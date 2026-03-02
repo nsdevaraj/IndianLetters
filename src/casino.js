@@ -76,11 +76,17 @@ function getAverageAngularVelocity(velocities) {
 function addButton(n) {
   const div = document.createElement('div');
   div.className = 'letter';
-  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n] + meyEzuthu + `" onclick="selectConsonant(this)"  />`
+  const input = document.createElement('input');
+  input.id = n;
+  input.type = 'button';
+  input.className = 'btn';
+  input.value = consonants[n] + meyEzuthu;
+  input.onclick = function() { selectConsonant(this); };
+  div.appendChild(input);
   document.getElementById('consonDiv').appendChild(div);
   if (n == 0) {
-    prevletter = div.childNodes[0];
-    div.childNodes[0].style.backgroundColor = "#88a119";
+    prevletter = input;
+    input.style.backgroundColor = "#88a119";
   }
 }
 

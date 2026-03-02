@@ -1284,7 +1284,10 @@
         function generateAudio() {
             var count = 0; // Initialize count here
             var outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = 'Starting generation...<br>';
+            outputDiv.textContent = '';
+            const startMsg = document.createElement('div');
+            startMsg.textContent = 'Starting generation...';
+            outputDiv.appendChild(startMsg);
 
             for (let i = 0; i <= 0; i++) {
                 // Only languages 0-8 are supported for generated audio
@@ -1296,7 +1299,9 @@
                 const vowelSigns = vowelSignLangs[i]; // This is just [signs], not nested
 
                 console.log(`Processing ${languageName} (${languageCode})...`);
-                outputDiv.innerHTML += `Processing ${languageName} (${languageCode})...<br>`;
+                const langMsg = document.createElement('div');
+                langMsg.textContent = `Processing ${languageName} (${languageCode})...`;
+                outputDiv.appendChild(langMsg);
 
                 for (let cIndex = 0; cIndex < consonants.length; cIndex++) {
                     const consonant = consonants[cIndex];
@@ -1317,7 +1322,10 @@
                     }
                 }
             }
-            outputDiv.innerHTML += `<br>Done! Generated ${count} items.`;
+            outputDiv.appendChild(document.createElement('br'));
+            const doneMsg = document.createElement('div');
+            doneMsg.textContent = `Done! Generated ${count} items.`;
+            outputDiv.appendChild(doneMsg);
         }
     </script>
 </body>
