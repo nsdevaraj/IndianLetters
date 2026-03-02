@@ -355,13 +355,14 @@ function bindEvents() {
 }
 
 // langIndex /?l=8
-var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1];
+var urlMatch = location.href.match(/[?&]l=([^&]*)/);
+var urlVal = urlMatch ? urlMatch[1] : "";
 if (urlVal.length > 0) {
   setTimeout(function () {
     dropDwn = document.getElementById('selectLanguage');
-    dropDwn.selectedIndex = parseInt(urlVal);
+    dropDwn.value = urlVal;
     setCurrentLang(dropDwn);
-  }), 100
+  }, 100);
 }
 
 window.onresize = function (event) {
