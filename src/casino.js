@@ -73,11 +73,12 @@ function getAverageAngularVelocity() {
   return total / len;
 }
 
-function addButton(n) {
+function addButton(n, consonDiv) {
+  consonDiv = consonDiv || document.getElementById('consonDiv');
   const div = document.createElement('div');
   div.className = 'letter';
   div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n] + meyEzuthu + `" onclick="selectConsonant(this)"  />`
-  document.getElementById('consonDiv').appendChild(div);
+  consonDiv.appendChild(div);
   if (n == 0) {
     prevletter = div.childNodes[0];
     div.childNodes[0].style.backgroundColor = "#88a119";
@@ -280,8 +281,9 @@ function init() {
     x: stage.width() / 2,
     y: stage.height() / 2 - 50,
   });
+  const consonDiv = document.getElementById('consonDiv');
   for (var n = 0; n < consonants.length; n++) {
-    addButton(n);
+    addButton(n, consonDiv);
   }
   for (var n = 0; n < numWedges; n++) {
     addWedge(n);
