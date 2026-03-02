@@ -61,14 +61,14 @@ function assignLanguage() {
   }
 }
 
-function getAverageAngularVelocity() {
+function getAverageAngularVelocity(velocities) {
   var total = 0;
-  var len = angularVelocities.length;
+  var len = velocities.length;
   if (len === 0) {
     return 0;
   }
   for (var n = 0; n < len; n++) {
-    total += angularVelocities[n];
+    total += velocities[n];
   }
   return total / len;
 }
@@ -325,7 +325,7 @@ function bindEvents() {
     "mouseup touchend",
     function () {
       controlled = false;
-      angularVelocity = getAverageAngularVelocity() * 5;
+      angularVelocity = getAverageAngularVelocity(angularVelocities) * 5;
       if (angularVelocity > 20) {
         angularVelocity = 20;
       } else if (angularVelocity < -20) {
