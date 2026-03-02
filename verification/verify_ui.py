@@ -6,7 +6,7 @@ def run():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         file_path = os.path.abspath("index.html")
-        page.goto(f"file://{file_path}")
+        page.goto(f"file://{file_path}", wait_until="commit")
         try:
             page.wait_for_selector(".wrapper", timeout=5000)
             # Wait a bit for Konva to render

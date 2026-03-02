@@ -61,14 +61,14 @@ function assignLanguage() {
   }
 }
 
-function getAverageAngularVelocity() {
+function getAverageAngularVelocity(velocities) {
   var total = 0;
-  var len = angularVelocities.length;
+  var len = velocities.length;
   if (len === 0) {
     return 0;
   }
   for (var n = 0; n < len; n++) {
-    total += angularVelocities[n];
+    total += velocities[n];
   }
   return total / len;
 }
@@ -77,11 +77,17 @@ function addButton(n, consonDiv) {
   consonDiv = consonDiv || document.getElementById('consonDiv');
   const div = document.createElement('div');
   div.className = 'letter';
-  div.innerHTML = `<input id="` + n + `" type="button" class="btn" value="` + consonants[n] + meyEzuthu + `" onclick="selectConsonant(this)"  />`
-  consonDiv.appendChild(div);
+  const input = document.createElement('input');
+  input.id = n;
+  input.type = 'button';
+  input.className = 'btn';
+  input.value = consonants[n] + meyEzuthu;
+  input.onclick = function() { selectConsonant(this); };
+  div.appendChild(input);
+  document.getElementById('consonDiv').appendChild(div);
   if (n == 0) {
-    prevletter = div.childNodes[0];
-    div.childNodes[0].style.backgroundColor = "#88a119";
+    prevletter = input;
+    input.style.backgroundColor = "#88a119";
   }
 }
 
@@ -133,22 +139,22 @@ function addWedge(n) {
     strokeWidth: 2,
   });
   wedge.add(wedgeBackground);// 1st inner circle 
-  var wedgeBackground = new Konva.Wedge({
+  var innerWedge1 = new Konva.Wedge({
     radius: (circleRadius / 2) + 50,
     angle: angle,
     fill: "#443344",
     stroke: "#ccc",
     strokeWidth: 1,
   });
-  wedge.add(wedgeBackground);// 2nd inner circle 
-  var wedgeBackground = new Konva.Wedge({
+  wedge.add(innerWedge1);// 2nd inner circle
+  var innerWedge2 = new Konva.Wedge({
     radius: (circleRadius / 4),
     angle: angle,
     fill: "#670000",
     stroke: "#670000",
     strokeWidth: 3,
   });
-  wedge.add(wedgeBackground);// 3rd inner circle 
+  wedge.add(innerWedge2);// 3rd inner circle
   var text = new Konva.Text({
     text: vowel,
     fontFamily: "Poppins",
@@ -327,7 +333,7 @@ function bindEvents() {
     "mouseup touchend",
     function () {
       controlled = false;
-      angularVelocity = getAverageAngularVelocity() * 5;
+      angularVelocity = getAverageAngularVelocity(angularVelocities) * 5;
       if (angularVelocity > 20) {
         angularVelocity = 20;
       } else if (angularVelocity < -20) {
@@ -357,13 +363,17 @@ function bindEvents() {
 }
 
 // langIndex /?l=8
-var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1];
-if (urlVal.length > 0) {
+var match = location.href.match(/[?&]l=([^&]*)/);
+if (match && match[1]) {
+  var urlVal = match[1];
+  var langIdx = parseInt(urlVal);
   setTimeout(function () {
-    dropDwn = document.getElementById('selectLanguage');
-    dropDwn.selectedIndex = parseInt(urlVal);
-    setCurrentLang(dropDwn);
-  }), 100
+    var dropDwn = document.getElementById('selectLanguage');
+    if (dropDwn && !isNaN(langIdx) && langIdx >= 0 && langIdx < dropDwn.options.length) {
+      dropDwn.selectedIndex = langIdx;
+      setCurrentLang(dropDwn);
+    }
+  }, 100);
 }
 
 window.onresize = function (event) {
