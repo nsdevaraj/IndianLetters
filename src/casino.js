@@ -355,13 +355,17 @@ function bindEvents() {
 }
 
 // langIndex /?l=8
-var urlVal = location.href.match(/[?&]?l=([^&]*)/)[1];
-if (urlVal.length > 0) {
+var match = location.href.match(/[?&]l=([^&]*)/);
+if (match && match[1]) {
+  var urlVal = match[1];
+  var langIdx = parseInt(urlVal);
   setTimeout(function () {
-    dropDwn = document.getElementById('selectLanguage');
-    dropDwn.selectedIndex = parseInt(urlVal);
-    setCurrentLang(dropDwn);
-  }), 100
+    var dropDwn = document.getElementById('selectLanguage');
+    if (dropDwn && !isNaN(langIdx) && langIdx >= 0 && langIdx < dropDwn.options.length) {
+      dropDwn.selectedIndex = langIdx;
+      setCurrentLang(dropDwn);
+    }
+  }, 100);
 }
 
 window.onresize = function (event) {
