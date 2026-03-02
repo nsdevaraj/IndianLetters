@@ -132,22 +132,22 @@ function addWedge(n) {
     strokeWidth: 2,
   });
   wedge.add(wedgeBackground);// 1st inner circle 
-  var wedgeBackground = new Konva.Wedge({
+  var innerWedge1 = new Konva.Wedge({
     radius: (circleRadius / 2) + 50,
     angle: angle,
     fill: "#443344",
     stroke: "#ccc",
     strokeWidth: 1,
   });
-  wedge.add(wedgeBackground);// 2nd inner circle 
-  var wedgeBackground = new Konva.Wedge({
+  wedge.add(innerWedge1);// 2nd inner circle
+  var innerWedge2 = new Konva.Wedge({
     radius: (circleRadius / 4),
     angle: angle,
     fill: "#670000",
     stroke: "#670000",
     strokeWidth: 3,
   });
-  wedge.add(wedgeBackground);// 3rd inner circle 
+  wedge.add(innerWedge2);// 3rd inner circle
   var text = new Konva.Text({
     text: vowel,
     fontFamily: "Poppins",
