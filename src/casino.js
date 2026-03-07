@@ -84,7 +84,7 @@ function addButton(n, consonDiv) {
   input.value = consonants[n] + meyEzuthu;
   input.onclick = function() { selectConsonant(this); };
   div.appendChild(input);
-  document.getElementById('consonDiv').appendChild(div);
+  consonDiv.appendChild(div);
   if (n == 0) {
     prevletter = input;
     input.style.backgroundColor = "#88a119";
