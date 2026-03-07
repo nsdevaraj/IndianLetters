@@ -1,18 +1,18 @@
-var vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign, consonantPhs, vowelLetterPhs, consonantPh, vowelLetterPh, consonantIndex;
-var width, height, centerText, dropDwn;
-var currentLang = 0;
-var prevletter;
+let vowelLetters, vowelSigns, consonants, consonant, vowelLetter, vowelSign, consonantPhs, vowelLetterPhs, consonantPh, vowelLetterPh, consonantIndex;
+let width, height, centerText;
+let currentLang = 0;
+let prevletter;
 Konva.angleDeg = false;
-var angularVelocity = 6;
-var angularVelocities = [];
-var lastRotation = 0;
-var controlled = false;
-var numWedges = vowelLetterLangs[0].length;
-var angularFriction = 0.2;
-var target, activeWedge, stage, layer, wheel, pointer;
-var meyEzuthu = '்';
-var centerX;
-var finished = false;
+let angularVelocity = 6;
+let angularVelocities = [];
+let lastRotation = 0;
+let controlled = false;
+let numWedges = vowelLetterLangs[0].length;
+const angularFriction = 0.2;
+let target, activeWedge, stage, layer, wheel, pointer;
+let meyEzuthu = '்';
+let centerX;
+let finished = false;
 
 function assignLanguage() {
   document.getElementById('consonDiv').innerHTML = '';
@@ -62,12 +62,12 @@ function assignLanguage() {
 }
 
 function getAverageAngularVelocity(velocities) {
-  var total = 0;
-  var len = velocities.length;
+  let total = 0;
+  const len = velocities.length;
   if (len === 0) {
     return 0;
   }
-  for (var n = 0; n < len; n++) {
+  for (let n = 0; n < len; n++) {
     total += velocities[n];
   }
   return total / len;
@@ -101,17 +101,17 @@ function selectConsonant(letter) {
 }
 
 function addWedge(n) {
-  var vowel = vowelLetters[n];
-  var circleRadius = stage.width() / 6 + 50
-  var innerCircleRadius = circleRadius - circleRadius / 5
-  var angle = (2 * Math.PI) / numWedges;
-  var wedge = new Konva.Group({
+  const vowel = vowelLetters[n];
+  const circleRadius = stage.width() / 6 + 50
+  const innerCircleRadius = circleRadius - circleRadius / 5
+  const angle = (2 * Math.PI) / numWedges;
+  const wedge = new Konva.Group({
     rotation: (2 * n * Math.PI) / numWedges,
   });
-  var colors = ['#C41E3A', '#0F52BA', '#50C878', '#9966CC', '#FFBF00', '#E0115F', '#008080', '#FF7F50'];
-  var startCol = colors[n % colors.length];
-  var startBgCol = colors[(n + 1) % colors.length];
-  var wedgeBorderBackground = new Konva.Wedge({
+  const colors = ['#C41E3A', '#0F52BA', '#50C878', '#9966CC', '#FFBF00', '#E0115F', '#008080', '#FF7F50'];
+  const startCol = colors[n % colors.length];
+  const startBgCol = colors[(n + 1) % colors.length];
+  const wedgeBorderBackground = new Konva.Wedge({
     radius: circleRadius,
     angle: angle,
     fillRadialGradientStartPoint: innerCircleRadius,
@@ -125,7 +125,7 @@ function addWedge(n) {
     strokeWidth: 2,
   });
   wedge.add(wedgeBorderBackground); // outer text circle 
-  var wedgeBackground = new Konva.Wedge({
+  const wedgeBackground = new Konva.Wedge({
     radius: innerCircleRadius,
     angle: angle,
     fillRadialGradientStartPoint: 0,
@@ -139,7 +139,7 @@ function addWedge(n) {
     strokeWidth: 2,
   });
   wedge.add(wedgeBackground);// 1st inner circle 
-  var innerWedge1 = new Konva.Wedge({
+  const innerWedge1 = new Konva.Wedge({
     radius: (circleRadius / 2) + 50,
     angle: angle,
     fill: "#443344",
@@ -147,7 +147,7 @@ function addWedge(n) {
     strokeWidth: 1,
   });
   wedge.add(innerWedge1);// 2nd inner circle
-  var innerWedge2 = new Konva.Wedge({
+  const innerWedge2 = new Konva.Wedge({
     radius: (circleRadius / 4),
     angle: angle,
     fill: "#670000",
@@ -155,7 +155,7 @@ function addWedge(n) {
     strokeWidth: 3,
   });
   wedge.add(innerWedge2);// 3rd inner circle
-  var text = new Konva.Text({
+  const text = new Konva.Text({
     text: vowel,
     fontFamily: "Poppins",
     fontSize: 30,
@@ -176,31 +176,31 @@ function addWedge(n) {
 
 function speak(letter1, letter2, conIndex, vowIndex) {
   if (currentLang > 8) {
-    var msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
+    const msg = new SpeechSynthesisUtterance(letter1 + "+" + letter2);
     window.speechSynthesis.speak(msg);
   } else {
-    consonantLetter = consonants[conIndex];
+    const consonantLetter = consonants[conIndex];
     vowelLetter = vowelLetters[vowIndex];
-    vowelSignLetter = vowelSigns[vowIndex];
-    mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter;
+    const vowelSignLetter = vowelSigns[vowIndex];
+    const mixedText = consonantLetter + meyEzuthu + ' plus ' + vowelLetter + '. ' + consonantLetter + vowelSignLetter;
     playAudio(mixedText)
 
   }
 }
 
 function playAudio(text) {
-  var announce = new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3");
+  const announce = new Audio("audio/" + lang[currentLang] + "/" + text + ".mp3");
   announce.playbackRate = 0.8;
   announce.play()
 }
 
 function animate(frame) {
   // handle wheel spin
-  var angularVelocityChange =
+  const angularVelocityChange =
     (angularVelocity * frame.timeDiff * (1 - angularFriction)) / 1000;
   angularVelocity -= angularVelocityChange;
   // activate / deactivate wedges based on point intersection
-  var shape = stage.getIntersection({
+  const shape = stage.getIntersection({
     x: stage.width() * 0.6 + 100,
     y: stage.height() / 2 - 100, // length to detect collision
   });
@@ -212,12 +212,12 @@ function animate(frame) {
       ((wheel.rotation() - lastRotation) * 1000) / frame.timeDiff
     );
   } else {
-    var diff = (frame.timeDiff * angularVelocity) / 1000;
+    const diff = (frame.timeDiff * angularVelocity) / 1000;
     if (diff > 0.0001) {
       wheel.rotate(diff);
     } else if (!finished && !controlled) {
       if (shape) {
-        var text = shape.getParent().findOne("Text").text();
+        const text = shape.getParent().findOne("Text").text();
         vowelLetter = text;
         showResult();
       }
@@ -244,7 +244,7 @@ function animate(frame) {
 }
 
 function showResult() {
-  var vowelIndex = vowelLetters.indexOf(vowelLetter)
+  const vowelIndex = vowelLetters.indexOf(vowelLetter)
   vowelSign = vowelSigns[vowelIndex];
   consonantPh = consonantPhs[consonantIndex];
   vowelLetterPh = vowelLetterPhs[vowelIndex];
@@ -288,10 +288,10 @@ function init() {
     y: stage.height() / 2 - 50,
   });
   const consonDiv = document.getElementById('consonDiv');
-  for (var n = 0; n < consonants.length; n++) {
+  for (let n = 0; n < consonants.length; n++) {
     addButton(n, consonDiv);
   }
-  for (var n = 0; n < numWedges; n++) {
+  for (let n = 0; n < numWedges; n++) {
     addWedge(n);
   }
 
@@ -314,7 +314,7 @@ function init() {
   stage.add(layer);
   // bind events
   bindEvents();
-  var anim = new Konva.Animation(animate, layer);
+  const anim = new Konva.Animation(animate, layer);
   setTimeout(function () {
     anim.start();
   }, 500);
@@ -346,13 +346,13 @@ function bindEvents() {
   stage.addEventListener(
     "mousemove touchmove",
     function (evt) {
-      var mousePos = stage.getPointerPosition();
+      const mousePos = stage.getPointerPosition();
       if (controlled && mousePos && target) {
-        var x = mousePos.x - wheel.getX();
-        var y = mousePos.y - wheel.getY();
-        var atan = Math.atan(y / x);
-        var rotation = x >= 0 ? atan : atan + Math.PI;
-        var targetGroup = target.getParent();
+        const x = mousePos.x - wheel.getX();
+        const y = mousePos.y - wheel.getY();
+        const atan = Math.atan(y / x);
+        const rotation = x >= 0 ? atan : atan + Math.PI;
+        const targetGroup = target.getParent();
         wheel.rotation(
           rotation - targetGroup.startRotation - target.angle() / 2
         );
@@ -363,12 +363,12 @@ function bindEvents() {
 }
 
 // langIndex /?l=8
-var match = location.href.match(/[?&]l=([^&]*)/);
+const match = location.href.match(/[?&]l=([^&]*)/);
 if (match && match[1]) {
-  var urlVal = match[1];
-  var langIdx = parseInt(urlVal);
+  const urlVal = match[1];
+  const langIdx = parseInt(urlVal);
   setTimeout(function () {
-    var dropDwn = document.getElementById('selectLanguage');
+    const dropDwn = document.getElementById('selectLanguage');
     if (dropDwn && !isNaN(langIdx) && langIdx >= 0 && langIdx < dropDwn.options.length) {
       dropDwn.selectedIndex = langIdx;
       setCurrentLang(dropDwn);
