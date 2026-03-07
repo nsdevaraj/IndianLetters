@@ -52,6 +52,7 @@ const sandbox = {
     document: {
         getElementById: () => ({
             innerHTML: '',
+            replaceChildren: () => {},
             appendChild: () => {},
             selectedIndex: 0
         }),
