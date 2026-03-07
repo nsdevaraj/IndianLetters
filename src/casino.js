@@ -15,7 +15,7 @@ var centerX;
 var finished = false;
 
 function assignLanguage() {
-  document.getElementById('consonDiv').innerHTML = '';
+  document.getElementById('consonDiv').replaceChildren();
   width = window.innerWidth;
   height = window.innerHeight;
   vowelLetters = vowelLetterLangs[currentLang][0];
