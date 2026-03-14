@@ -75,6 +75,7 @@ const sandbox = {
     location: {
         href: 'http://localhost/?l=0'
     },
+    meyEzuthuLangs: ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''],
     Audio: class {
         constructor() {
             this.playbackRate = 1;
@@ -124,4 +125,41 @@ test('getAverageAngularVelocity - handles floating point values', () => {
   const velocities = [1.5, 2.5, 3.5];
   const result = sandbox.getAverageAngularVelocity(velocities);
   assert.strictEqual(result, 2.5);
+});
+
+test('assignLanguage - correctly sets meyEzuthu for different languages', () => {
+  // Mock data for vowelLetterLangs
+  sandbox.vowelLetterLangs = [
+    [['அ'], ['a']],
+    [['అ'], ['a']],
+    [['ಅ'], ['a']],
+    [['অ'], ['a']],
+    [['अ'], ['a']],
+    [['ਅ'], ['a']],
+    [['അ'], ['a']],
+    [['અ'], ['a']],
+    [['ะ'], ['a']],
+    [['අ'], ['a']]
+  ];
+  sandbox.vowelSignLangs = [[], [], [], [], [], [], [], [], [], []];
+  sandbox.consonantLangs = [
+    [['க'], ['ka']],
+    [['క'], ['ka']],
+    [['ಕ'], ['ka']],
+    [['ক'], ['ka']],
+    [['क'], ['ka']],
+    [['ਕ'], ['ka']],
+    [['ക'], ['ka']],
+    [['ક'], ['ka']],
+    [['ก'], ['ka']],
+    [['ක'], ['ka']]
+  ];
+
+  const expectedMeyEzuthu = ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''];
+
+  for (let i = 0; i < 10; i++) {
+    vm.runInContext(`currentLang = ${i}`, context);
+    sandbox.assignLanguage();
+    assert.strictEqual(vm.runInContext('meyEzuthu', context), expectedMeyEzuthu[i], `Language index ${i} failed`);
+  }
 });

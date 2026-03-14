@@ -27,38 +27,7 @@ function assignLanguage() {
   vowelLetter = vowelLetters[0];
   consonantIndex = 0;
   numWedges = vowelLetters.length;
-  switch (currentLang) {
-    case 0:
-      meyEzuthu = '்'
-      break;
-    case 1:
-      meyEzuthu = '్'
-      break;
-    case 2:
-      meyEzuthu = '್'
-      break;
-    case 3:
-      meyEzuthu = '্'
-      break;
-    case 4:
-      meyEzuthu = '्'
-      break;
-    case 5:
-      meyEzuthu = '੍'
-      break;
-    case 6:
-      meyEzuthu = '്'
-      break;
-    case 7:
-      meyEzuthu = '્'
-      break;
-    case 8:
-      meyEzuthu = 'ฺ'
-      break;
-    default:
-      meyEzuthu = ''
-      break;
-  }
+  meyEzuthu = meyEzuthuLangs[currentLang] || '';
 }
 
 function getAverageAngularVelocity(velocities) {
