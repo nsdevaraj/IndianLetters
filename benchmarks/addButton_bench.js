@@ -2,98 +2,34 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const { performance } = require('node:perf_hooks');
+const letters = require('../src/letters');
 
-const casinoJSPath = path.resolve(__dirname, '../src/casino.js');
-const casinoJSContent = fs.readFileSync(casinoJSPath, 'utf8');
+const source = fs.readFileSync(path.resolve(__dirname, '../src/casino.js'), 'utf8');
+const iterations = 10000;
 
-function createSandbox() {
-    let getElementByIdCount = 0;
-    return {
-        Konva: {
-            angleDeg: false,
-            Stage: class { add() {} },
-            Layer: class { add() {} },
-            Group: class {
-                constructor() {}
-                add() {}
-                on() {}
-            },
-            Wedge: class {
-                constructor() {}
-                add() {}
-            },
-            Text: class {
-                constructor() {}
-                cache() {}
-            },
-            Animation: class {
-                constructor() {}
-                start() {}
-            }
-        },
-        vowelLetterLangs: [[[]]],
-        vowelSignLangs: [[]],
-        consonantLangs: [[['k', 'kh', 'g', 'gh']]],
-        lang: [[]],
-        consonants: ['k', 'kh', 'g', 'gh'],
-        meyEzuthu: '',
+function runBench(cachedContainer) {
+    let lookups = 0;
+    const container = { replaceChildren() {}, appendChild() {} };
+    const sandbox = {
+        ...letters,
         document: {
-            getElementById: (id) => {
-                getElementByIdCount++;
-                return {
-                    appendChild: () => {},
-                    style: {}
-                };
-            },
-            createElement: () => ({
-                appendChild: () => {},
-                style: {}
-            })
-        },
-        window: {
-            innerWidth: 1024,
-            innerHeight: 768
-        },
-        location: { href: 'http://localhost/?l=0' },
-        selectConsonant: () => {},
-        setTimeout: () => {},
-        get getElementByIdCount() { return getElementByIdCount; },
-        set getElementByIdCount(v) { getElementByIdCount = v; }
+            addEventListener() {},
+            getElementById() { lookups++; return container; },
+            createElement: () => ({ setAttribute() {}, addEventListener() {} })
+        }
     };
-}
-
-const iterations = 100000;
-
-function runBench(passingContainer) {
-    const sandbox = createSandbox();
-    const context = vm.createContext(sandbox);
-    vm.runInContext(casinoJSContent, context);
-
-    let container = null;
-    if (passingContainer) {
-        container = sandbox.document.getElementById('consonDiv');
-    }
-    sandbox.getElementByIdCount = 0;
-
+    vm.runInContext(source, vm.createContext(sandbox));
     const start = performance.now();
     for (let i = 0; i < iterations; i++) {
-        sandbox.addButton(i % 4, container);
+        sandbox.renderButtons(
+            cachedContainer ? container : sandbox.document.getElementById('consonDiv'),
+            letters.consonantLangs[0], 0, () => {}, true
+        );
     }
-    const end = performance.now();
-    return {
-        time: end - start,
-        calls: sandbox.getElementByIdCount
-    };
+    return { milliseconds: performance.now() - start, lookups };
 }
 
-console.log(`Running benchmark for ${iterations} iterations...`);
-
-const res1 = runBench(false);
-console.log(`Case 1: NOT passing container (current typical use if not for init optimization)`);
-console.log(`  Time taken: ${res1.time.toFixed(4)}ms`);
-console.log(`  document.getElementById calls: ${res1.calls}`);
-
-const res2 = runBench(true);
-console.log(`Case 2: Passing container (current 'init' optimization, but addButton is still inefficient)`);
-console.log(`  Time taken: ${res2.time.toFixed(4)}ms`);
-console.log(`  document.getElementById calls: ${res2.calls}`);
+for (const cached of [false, true]) {
+    const result = runBench(cached);
+    console.log(`${iterations} button-grid renders (${cached ? 'cached container' : 'DOM lookup'}): ${result.milliseconds.toFixed(2)}ms, ${result.lookups} lookups`);
+}

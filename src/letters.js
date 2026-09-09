@@ -1,92 +1,166 @@
-var lang=["தமிழ்", "తెలుగు", "ಕನ್ನಡ", "বাংলা","हिंदी","ਗੁਰਮੁਖੀ","മലയാളം","ગુજરાતી","ไทย","සිංහල"]
-var vowelLetterLangs = [// "Tamil"
-  [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'],
-  ['a', 'ah', 'i', 'e', 'u', 'ooh', 'a', 'a', 'eye', 'o', 'oh', 'au']],
-  // "Telugu"
-  [['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ', 'అం', 'అః'],
-  ['a', 'aa', 'e', 'e', 'u', 'oo', 'ri', 'ri', 'e', 'a', 'i', 'o', 'oh', 'au', 'am', 'aah']],
-  // "Kannada"
-  [['ಅ', 'ಆ', 'ಇ', 'ಈ', 'ಉ', 'ಊ', 'ಋ', 'ಎ', 'ಏ', 'ಐ', 'ಒ', 'ಓ', 'ಔ', 'ಅಂ', 'ಅಃ'],
-  ['a', 'a', 'i', 'e', 'u', 'u', 'r', 'a', 'ae', 'i', 'o', 'o', 'ou', 'am', 'ah']],
-  // "Bangla"
-  [['অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'ৠ', 'ঌ', 'ৡ', 'এ', 'ঐ', 'ও', 'ঔ'],
-  ['a', 'a', 'e', 'e', 'u', 'u', 'ri', 'rī', 'li', 'lī', 'e', 'eai', 'o', 'au']],
-  // "Hindi"
-  [['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'],
-  ['a', 'a', 'i', 'e', 'u', 'uu', 'ri', 'a', 'aye', 'o', 'au', 'am', 'ah']],
-  // "Punjabi"
-  [['ਅ', 'ਆ', 'ਇ', 'ਈ', 'ਉ', 'ਊ', 'ਏ', 'ਐ', 'ਓ', 'ਔ'],
-  ['a', 'a', 'i', 'e', 'u', 'u', 'a', 'ai', 'o', 'au']],
-  // "Malayalam"
-  [['അ', 'ആ', 'ഇ', 'ഈ', 'ഉ', 'ഊ', 'ഋ', 'ൠ', 'ഌ', 'ൡ', 'എ', 'ഏ', 'ഐ', 'ഒ', 'ഓ', 'ഔ', 'അം', 'അഃ'],
-  ['a', 'a', 'i', 'e', 'u', 'u', 'r', 'ri', 'li', 'lī', 'a', 'a', 'ai', 'o', 'o', 'au', 'am', 'ah']],
-  // "Gujarati"
-  [['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'ૠ', 'ઌ', 'ૡ', 'એ', 'ઍ', 'ઐ', 'ઓ', 'ઑ', 'ઔ', 'અઁ', 'અં', 'અઃ'],
-  ['a', 'aa', 'ī', 'e', 'u', 'u', 'ri', 'rī', 'li', 'lī', 'a', 'e', 'ai', 'o', 'awe', 'au', 'an', 'am', 'ah']],
-  // "Thai"
-  [['ะ','ั','า','ิ','ี','ึ','ื','ุ','ู','ฤ','ฦ','ๅ','เ','แ','โ','ำ','ไ','ใ','๏','ๆ','ฯ','๚','๛'],
-  ['ะ','ั','า','ิ','ี','ึ','ื','ุ','ู','ฤ','ฦ','ๅ','เ','แ','โ','ำ','ไ','ใ','๏','ๆ','ฯ','๚','๛']],
-  // "Sinhala"
-  [['අ', 'ආ', 'ඇ', 'ඈ', 'ඉ', 'ඊ', 'උ', 'ඌ', 'එ', 'ඒ', 'ඓ', 'ඔ', 'ඕ', 'ඖ', 'ඍ', 'ඎ', 'ඏ', 'ඐ', 'අං', 'අඃ'],
-  ['a', 'ā', 'æ', 'ǣ', 'i', 'ī', 'u', 'ū', 'e', 'ē', 'ai', 'o', 'ō', 'au', 'ru', 'rū', 'li', 'lī', 'am', 'ah']],
-  // "Oriya"
- // [['ଅ', 'ଆ', 'ଇ', 'ଈ', 'ଉ', 'ଊ', 'ଋ', 'ୠ', 'ଌ', 'ୡ', 'ଏ', 'ଐ', 'ଓ', 'ঔ'],
- //  ['a', 'a', 'i', 'i', 'u', 'ri', 'rī', 'li', 'lī', 'e', 'o', 'ai', 'au']]
-   //Burmese
-  // [['ဣ','ဤ','ဥ','ဦ','ဧ','ဩ','ဪ'],
-  // ['ā','i','ī','u','ū','e','o','ō']],
-]
+var lang = ['தமிழ்', 'తెలుగు', 'ಕನ್ನಡ', 'বাংলা', 'हिंदी', 'ਗੁਰਮੁਖੀ', 'മലയാളം', 'ગુજરાતી', 'ไทย', 'සිංහල'];
 
-var consonantLangs = [// "Tamil"
-  [['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'],
-  ['ka', 'na', 's', 'nya', 'd', 'na', 'tha', 'na', 'b', 'm', 'ya', 'ra', 'la', 'v', 'zha', 'la', 'ra', 'na']],
-  // "Telugu"
-  [['క', 'ఖ', 'గ', 'ఘ', 'ఙ', 'చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ'],
-  ['ka', 'kha', 'ga', 'gha', 'nga', 'ca', 'chha', 'ja', 'jha', 'na', 'ta', 'tha', 'd', 'dh', 'na', 'ta', 'tha', 'da', 'dha', 'na', 'pa', 'pha', 'ba', 'bha', 'ma', 'ya', 'ra', 'la', 'va', 'sha', 'sha', 'sa', 'ha', 'La', 'ksha', 'ra']],
-  //"Kannada"
-  [['ಕ', 'ಖ', 'ಗ', 'ಘ', 'ಙ', 'ಚ', 'ಛ', 'ಜ', 'ಝ', 'ಞ', 'ಟ', 'ಠ', 'ಡ', 'ಢ', 'ಣ', 'ತ', 'ಥ', 'ದ', 'ಧ', 'ನ', 'ಪ', 'ಫ', 'ಬ', 'ಭ', 'ಮ', 'ಯ', 'ರ', 'ಲ', 'ವ', 'ಶ', 'ಷ', 'ಸ', 'ಹ', 'ಳ'],
-  ['k', 'kha', 'ga', 'gha', 'ny', 'c', 'cha', 'ja', 'jha', 'na', 's', 'tha', 'd', 'dha', 'na', 't', 'tha', 'da', 'dha', 'na', 's', 'f', 'b', 'bha', 'ga', 'ya', 'r', 'la', 'ka', 'sha', 'sha', 's', 'ha', 'la']],
-  // "Bangla"
-  [['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', '𑒕', 'জ', 'ঝ', '𑒗', 'ঞ', 'ট', '𑒙', 'ঠ', 'ড', 'ড়', 'ঢ', 'ঢ়', 'ণ', 'ত', 'থ', 'দ', 'ধ', 'ন', 'প', 'ফ', '𑒤', 'ব', 'ভ', 'ম', 'য', 'য়', 'র', 'ৰ', 'ল', '𑒪', 'ৱ', 'শ', 'ষ', 'স', 'হ'],
-  ['k', 'kha', 'ga', 'gha', 'na', 'ch', 'cha', 'ja', 'ja', 'jha', 'ja', 'na', 't', 'th', 'th', 'd', 'd', 'dh', 'dh', 'na', 'ta', 'th', 'da', 'dha', 'na', 'p', 'f', 'pho', 'b', 'v', 'm', 'ya', 'ya', 'ra', 'ra', 'l', 'no', 'o', 'sh', 'sh', 's', 'h']],
-  // "Hindi"
-  [['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह'],
-  ['k', 'kh', 'g', 'gha', 'na', 'ch', 'chh', 'ja', 'jha', 'na', 't', 'th', 'd', 'dh', 'na', 't', 'th', 'the', 'dh', 'na', 'p', 'f', 'b', 'bh', 'm', 'ya', 'r', 'l', 'v', 'sch', 'sh', 's', 'h']],
-  // "Punjabi"
-  [['ਕ', 'ਖ', 'ਗ', 'ਘ', 'ਙ', 'ਚ', 'ਛ', 'ਜ', 'ਝ', 'ਞ', 'ਟ', 'ਠ', 'ਡ', 'ਢ', 'ਣ', 'ਤ', 'ਥ', 'ਦ', 'ਧ', 'ਨ', 'ਪ', 'ਫ', 'ਬ', 'ਭ', 'ਮ', 'ਯ', 'ਰ', 'ਲ', 'ਲ਼', 'ਵ', 'ਸ਼', 'ਸ', 'ਹ', 'ਖ਼', 'ਗ਼', 'ਜ਼', 'ੜ', 'ਫ਼'],
-  ['k', 'kh', 'g', 'gha', 'na', 'ch', 'ch', 'j', 'jha', 'na', 't', 'th', 'd', 'dh', 'na', 't', 'th', 'the', 'dh', 'na', 'pa', 'f', 'b', 'bh', 'ma', 'y', 'r', 'le', 'l', 'va', 'sh', 's', 'h', 'kh', 'g', 'z', 'd', 'f']],
-  // "Malayalam"
-  [['ക', 'ഖ', 'ഗ', 'ഘ', 'ങ', 'ച', 'ഛ', 'ජ', 'ഝ', 'ഞ', 'ട', 'ഠ', 'ഡ', 'ഢ', 'ണ', 'ത', 'ഥ', 'ദ', 'ധ', 'ന', 'പ', 'ഫ', 'බ', 'භ', 'മ', 'യ', 'ര', 'ല', 'വ','ഩ', 'ശ', 'ഷ', 'സ', 'ഹ', 'ള', 'ഴ', 'റ','റ്റ','ർ','ൾ','ൽ','ൻ','ൺ','ൿ'],
-  ['ka', 'kha', 'ga', 'gha', 'nga', 'ca', 'cha', 'ja', 'jha', 'nya', 'ta', 'tha', 'da', 'dha', 'na', 'ta', 'tha', 'da', 'dha', 'na', 'pa', 'pha', 'ba', 'bha', 'ma', 'ya', 'ra', 'la', 'va', 'na', 'sha', 'sha', 'sa', 'ha', 'la', 'zha', 'ra', 'tta', 'r', 'l', 'l', 'n', 'N', 'k']],
-  // "Gujarati"
-  [['ક', 'ખ', 'ગ', 'ઘ', 'ઙ', 'ચ', 'છ', 'જ', 'ઝ', 'ઞ', 'ટ', 'ઠ', 'ડ', 'ઢ', 'ણ', 'ત', 'થ', 'દ', 'ધ', 'ન', 'પ', 'ફ', 'બ', 'ભ', 'મ', 'ય', 'ર', 'લ', 'ળ', 'વ', 'શ', 'ષ', 'સ', 'હ', 'ળ'],
-  ['ka', 'kh', 'ga', 'gh', 'jai', 'cha', 'chh', 'j', 'z', 'ja', 'ta', 'th', 'de', 'dh', 'bha', 'bha', 'th', 'the', 'dh', 'n', 'pa', 'fa', 'b', 'bha', 'ma', 'ya', 'ra', 'bha', 'da', 'va', 'sh', 'sh', 's', 'hi', 'da']],
-  // "Thai"
-  [['ก','ข','ฃ','ค','ฅ','ฆ','ง','จ','ฉ','ช','ซ','ฌ','ญ','ฎ','ฏ','ฐ','ฑ','ฒ','ณ','ด','ต','ถ','ท','ธ','น','บ','ป','ผ','พ','ภ','ม','ฝ','ฟ','ย','ร','ล','ว','ศ','ษ','ส','ห','ฬ','อ','ฮ'],
-  ['k','k̄h','ḳ̄h','kh','k̛h','ḳh','ng','c ','c̄h ','ch ','s ','c̣h ','ỵ ','ḍ ','ṭ ','ṭ̄h ','ṯh ','t̛h ','ṇ ','d ','t ','t̄h ','th ','ṭh ','n ','b ','p ','p̄h ','ph ','p̣h ','m ','f̄ ','f ','y ','r ','l ','w ','ṣ̄ ','s̛̄ ','s̄ ','h̄ ','ḷ ','x ','ḥ']],
-  // "Sinhala"
-  [['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],
-  ['ka', 'kha', 'ga', 'gha', 'nga', 'ⁿga', 'ca', 'cha', 'ja', 'jha', 'ña', 'jña', 'ñja', 'Ṭa', 'Ṭha', 'Ḍa', 'Ḍha', 'Ṇa', 'ⁿḌa', 'ta', 'tha', 'da', 'dha', 'na', 'ⁿda', 'pa', 'pha', 'ba', 'bha', 'ma', 'ᵐba', 'ya', 'ra', 'la', 'Ḷa', 'va', 'ha', 'śa', 'Ṣa', 'sa', 'fa']],
-  // "Oriya"
- // [['କ୍', 'ଖ୍', 'ଗ୍', 'ଘ୍', 'ଙ୍', 'ଚ୍', 'ଛ୍', 'ଜ୍', 'ଝ୍', 'ଞ୍', 'ଟ୍', 'ଠ୍', 'ଡ୍', 'ଢ୍', 'ଣ୍', 'ତ୍', 'ଥ୍', 'ଦ୍', 'ଧ୍', 'ନ୍', 'ପ୍', 'ଫ୍', 'ବ୍', 'ଭ୍', 'ମ୍', 'ଯ୍', 'ୟ୍', 'ର୍', 'ଳ୍', 'ଲ୍', 'ୱ୍', 'ଶ୍', 'ଷ୍', 'ସ୍', 'ହ୍'],
- //  ['k', 'kh', 'ga', 'gh', 'n', 'ch', 'chh', 'ja', 'jh', 'n', 't', 'th', 'd', 'dh', 'n', 't', 'th', 'd', 'dh', 'n', 'p', 'f', 'b', 'bh', 'm', 'ya', 'y', 'r', 'l', 'l', 'w', 'sh', 'sh', 's', 'h']]
-  //"Burmese"
- // [['က','ခ','ဂ','ဃ','င','စ','ဆ','ဇ','ဈ','ဉ','ည','ဋ','ဌ','ဍ','ဎ','ဏ','တ','ထ','ဒ','ဓ','န','ပ','ဖ','ဗ','ဘ','မ','ယ','ရ','လ','ဠ','ဝ','ဟ','သ','ဿ']
- // ['k','kh','g','gh','nga','s','sh','j','jha','n','na','t','ta','d','da','na','t','ta','d','da','na','p','pa','b','bha','ma','ya','ra','la','La','wa','ha','sa','Sa']],
-]
+var vowelLetterLangs = [
+  ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'],
+  ['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ', 'అం', 'అః'],
+  ['ಅ', 'ಆ', 'ಇ', 'ಈ', 'ಉ', 'ಊ', 'ಋ', 'ಎ', 'ಏ', 'ಐ', 'ಒ', 'ಓ', 'ಔ', 'ಅಂ', 'ಅಃ'],
+  ['অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'ৠ', 'ঌ', 'ৡ', 'এ', 'ঐ', 'ও', 'ঔ'],
+  ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'],
+  ['ਅ', 'ਆ', 'ਇ', 'ਈ', 'ਉ', 'ਊ', 'ਏ', 'ਐ', 'ਓ', 'ਔ'],
+  ['അ', 'ആ', 'ഇ', 'ഈ', 'ഉ', 'ഊ', 'ഋ', 'ൠ', 'ഌ', 'ൡ', 'എ', 'ഏ', 'ഐ', 'ഒ', 'ഓ', 'ഔ', 'അം', 'അഃ'],
+  ['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'ૠ', 'ઌ', 'ૡ', 'એ', 'ઍ', 'ઐ', 'ઓ', 'ઑ', 'ઔ', 'અઁ', 'અં', 'અઃ'],
+  ['◌ะ', '◌า', '◌ิ', '◌ี', '◌ึ', '◌ือ', '◌ุ', '◌ู', 'เ◌', 'แ◌', 'โ◌', '◌ำ', 'ไ◌', 'ใ◌'],
+  ['අ', 'ආ', 'ඇ', 'ඈ', 'ඉ', 'ඊ', 'උ', 'ඌ', 'එ', 'ඒ', 'ඓ', 'ඔ', 'ඕ', 'ඖ', 'ඍ', 'ඎ', 'ඏ', 'ඐ', 'අං', 'අඃ'],
+];
 
-var vowelSignLangs = [['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ'],
-['', 'ా', 'ి', 'ీ', 'ు', 'ೂ', 'ృ', 'ౄ', 'ె', 'ే', 'ై', 'ొ', 'ో', 'ౌ', 'ం', 'ః'],
-['', 'ಾ', 'ಿ', 'ೀ', 'ು', 'ೂ', 'ೃ', 'ೄ', 'ೆ', 'ೇ', 'ೊ', 'ೋ', 'ೌ', 'ಂ', 'ಃ'],
-['', 'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ৄ', 'ৢ', 'ৣ', 'ে', 'ৈ', 'ো', 'ৌ'],
-['', 'ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'े', 'ै', 'ो', 'ौ', 'ं', 'ः'],
-['', 'ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ'],
-['', 'ാ', 'ി', 'ീ', 'ു', 'ೂ', 'ൃ', 'ൄ', 'ൢ', 'ൣ', 'െ', 'േ', 'ൈ', 'ൊ', 'ോ', 'ൌ', 'ം', 'ഃ'],
-['', 'ા', 'િ', 'ી', 'ુ', 'ೂ', 'ૃ', 'ૄ', 'ૢ', 'ૣ', 'ે', 'ૅ', 'ૈ', 'ો', 'ૉ', 'ૌ', 'ઁ', 'ં', 'ઃ',],
-['ะ','ั','า','ิ','ี','ึ','ื','ุ','ู','ฤ','ฦ','ๅ','เ','แ','โ','ำ','ไ','ใ','๏','ๆ','ฯ','๚','๛'],
-['', 'ා', 'ැ', 'ෑ', 'ි', 'ී', 'ු', 'ූ', 'ෙ', 'ේ', 'ෛ', 'ො', 'ෝ', 'ෞ', 'ෘ', 'ෲ', 'ෟ', 'ෳ', 'ං', 'ඃ'],
-//['', 'ା', 'ି', 'ୀ', 'ୁ', 'ୂ', 'ୃ', 'ୄ', 'ୢ', 'ୣ', 'େ', 'ୈ', 'ୋ', 'ୌ']
-//['ါ','ာ','ိ','ီ','ု','ူ','ေ','ဲ','ဲ'],
-]
+var consonantLangs = [
+  ['க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ப', 'ம', 'ய', 'ர', 'ல', 'வ', 'ழ', 'ள', 'ற', 'ன'],
+  ['క', 'ఖ', 'గ', 'ఘ', 'ఙ', 'చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ'],
+  ['ಕ', 'ಖ', 'ಗ', 'ಘ', 'ಙ', 'ಚ', 'ಛ', 'ಜ', 'ಝ', 'ಞ', 'ಟ', 'ಠ', 'ಡ', 'ಢ', 'ಣ', 'ತ', 'ಥ', 'ದ', 'ಧ', 'ನ', 'ಪ', 'ಫ', 'ಬ', 'ಭ', 'ಮ', 'ಯ', 'ರ', 'ಲ', 'ವ', 'ಶ', 'ಷ', 'ಸ', 'ಹ', 'ಳ'],
+  ['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', 'জ', 'ঝ', 'ঞ', 'ট', 'ঠ', 'ড', 'ড়', 'ঢ', 'ঢ়', 'ণ', 'ত', 'থ', 'দ', 'ধ', 'ন', 'প', 'ফ', 'ব', 'ভ', 'ম', 'য', 'য়', 'র', 'ল', 'শ', 'ষ', 'স', 'হ'],
+  ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'ड़', 'ढ़', 'क़', 'ख़', 'ग़', 'ज़', 'फ़'],
+  ['ਕ', 'ਖ', 'ਗ', 'ਘ', 'ਙ', 'ਚ', 'ਛ', 'ਜ', 'ਝ', 'ਞ', 'ਟ', 'ਠ', 'ਡ', 'ਢ', 'ਣ', 'ਤ', 'ਥ', 'ਦ', 'ਧ', 'ਨ', 'ਪ', 'ਫ', 'ਬ', 'ਭ', 'ਮ', 'ਯ', 'ਰ', 'ਲ', 'ਲ਼', 'ਵ', 'ਸ਼', 'ਸ', 'ਹ', 'ਖ਼', 'ਗ਼', 'ਜ਼', 'ੜ', 'ਫ਼'],
+  ['ക', 'ഖ', 'ഗ', 'ഘ', 'ങ', 'ച', 'ഛ', 'ജ', 'ഝ', 'ഞ', 'ട', 'ഠ', 'ഡ', 'ഢ', 'ണ', 'ത', 'ഥ', 'ദ', 'ധ', 'ന', 'പ', 'ഫ', 'ബ', 'ഭ', 'മ', 'യ', 'ര', 'ല', 'വ', 'ഩ', 'ശ', 'ഷ', 'സ', 'ഹ', 'ള', 'ഴ', 'റ', 'റ്റ'],
+  ['ક', 'ખ', 'ગ', 'ઘ', 'ઙ', 'ચ', 'છ', 'જ', 'ઝ', 'ઞ', 'ટ', 'ઠ', 'ડ', 'ઢ', 'ણ', 'ત', 'થ', 'દ', 'ધ', 'ન', 'પ', 'ફ', 'બ', 'ભ', 'મ', 'ય', 'ર', 'લ', 'ળ', 'વ', 'શ', 'ષ', 'સ', 'હ'],
+  ['ก', 'ข', 'ฃ', 'ค', 'ฅ', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'],
+  ['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],
+];
 
-var meyEzuthuLangs = ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''];
+var vowelSignLangs = [
+  ['', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ'],
+  ['', 'ా', 'ి', 'ీ', 'ు', 'ూ', 'ృ', 'ౄ', 'ె', 'ే', 'ై', 'ొ', 'ో', 'ౌ', 'ం', 'ః'],
+  ['', 'ಾ', 'ಿ', 'ೀ', 'ು', 'ೂ', 'ೃ', 'ೆ', 'ೇ', 'ೈ', 'ೊ', 'ೋ', 'ೌ', 'ಂ', 'ಃ'],
+  ['', 'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ৄ', 'ৢ', 'ৣ', 'ে', 'ৈ', 'ো', 'ৌ'],
+  ['', 'ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'े', 'ै', 'ो', 'ौ', 'ं', 'ः'],
+  ['', 'ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ'],
+  ['', 'ാ', 'ി', 'ീ', 'ു', 'ൂ', 'ൃ', 'ൄ', 'ൢ', 'ൣ', 'െ', 'േ', 'ൈ', 'ൊ', 'ോ', 'ൗ', 'ം', 'ഃ'],
+  ['', 'ા', 'િ', 'ી', 'ુ', 'ૂ', 'ૃ', 'ૄ', 'ૢ', 'ૣ', 'ે', 'ૅ', 'ૈ', 'ો', 'ૉ', 'ૌ', 'ઁ', 'ં', 'ઃ'],
+  ['ะ', 'า', 'ิ', 'ี', 'ึ', 'ือ', 'ุ', 'ู', 'เ', 'แ', 'โ', 'ำ', 'ไ', 'ใ'],
+  ['', 'ා', 'ැ', 'ෑ', 'ි', 'ී', 'ු', 'ූ', 'ෙ', 'ේ', 'ෛ', 'ො', 'ෝ', 'ෞ', 'ෘ', 'ෲ', 'ෟ', 'ෳ', 'ං', 'ඃ'],
+];
+
+var meyEzuthuLangs = ['்', '్', '್', '্', '्', '੍', '്', '્', '', '්'];
+
+var languageDetails = [
+  {
+    code: 'ta-IN', font: 'Noto Sans Tamil', script: 'Tamil',
+    note: 'Core Tamil: 18 consonants and 12 vowels. Aytham and Grantha extensions are outside this exercise.',
+  },
+  {
+    code: 'te-IN', font: 'Noto Sans Telugu', script: 'Telugu',
+    extendedVowels: ['ౠ'],
+    note: 'Includes the conjunct క్ష, traditional ఱ and Sanskrit vowel ౠ. Anusvara and visarga forms are signs, not independent vowels.',
+  },
+  {
+    code: 'kn-IN', font: 'Noto Sans Kannada', script: 'Kannada',
+    note: 'Core Kannada consonants and vowels. Anusvara and visarga forms are shown separately as signs.',
+  },
+  {
+    code: 'bn-IN', font: 'Noto Sans Bengali', script: 'Bengali',
+    extendedVowels: ['ৠ', 'ঌ', 'ৡ'],
+    note: 'Includes Sanskrit-only vowels ৠ, ঌ and ৡ. The vowel-less letter ৎ is not used in this consonant-vowel exercise.',
+  },
+  {
+    code: 'hi-IN', font: 'Noto Sans Devanagari', script: 'Devanagari',
+    note: 'Includes 33 core consonants and seven common nukta letters. Anusvara and visarga forms are signs, not independent vowels.',
+  },
+  {
+    code: 'pa-IN', font: 'Noto Sans Gurmukhi', script: 'Gurmukhi',
+    note: 'Includes dotted consonant extensions. Ordinary consonant letters are shown without virama; the three vowel carriers are represented through the ten vowel choices.',
+  },
+  {
+    code: 'ml-IN', font: 'Noto Sans Malayalam', script: 'Malayalam',
+    extendedVowels: ['ൠ', 'ഌ', 'ൡ'],
+    note: 'Includes scholarly ഩ, the conjunct റ്റ and rare Sanskrit vowels. Uses modern ൗ for ഔ and ordinary consonant bases rather than chillus.',
+  },
+  {
+    code: 'gu-IN', font: 'Noto Sans Gujarati', script: 'Gujarati',
+    extendedVowels: ['ૠ', 'ઌ', 'ૡ'],
+    note: 'Includes rare Sanskrit vocalic vowels. Candrabindu, anusvara and visarga forms are signs, not independent vowels.',
+  },
+  {
+    code: 'th-TH', font: 'Noto Sans Thai', script: 'Thai',
+    note: 'All 44 consonants, including obsolete ฃ and ฅ, with 14 common vowel patterns. ◌ marks the consonant position. Final-consonant patterns and tone rules are not covered.',
+  },
+  {
+    code: 'si-LK', font: 'Noto Sans Sinhala', script: 'Sinhala',
+    extendedVowels: ['ඍ', 'ඎ', 'ඏ', 'ඐ'],
+    note: 'Mixed Sinhala inventory, including Sanskrit-derived vowels. Anusvara and visarga forms are signs, not independent vowels.',
+  },
+];
+
+var vowelMarkNames = {
+  'ం': 'anusvara', 'ః': 'visarga', 'ಂ': 'anusvara', 'ಃ': 'visarga',
+  'ं': 'anusvara', 'ः': 'visarga', 'ം': 'anusvara', 'ഃ': 'visarga',
+  'ઁ': 'candrabindu', 'ં': 'anusvara', 'ઃ': 'visarga', 'ං': 'anusvara', 'ඃ': 'visarga',
+};
+
+function getVowelKind(languageIndex, vowelIndex) {
+  if (languageIndex === 8) return 'vowel pattern';
+  if (languageDetails[languageIndex].extendedVowels?.includes(vowelLetterLangs[languageIndex][vowelIndex])) {
+    return 'vowel (Sanskrit-derived)';
+  }
+  return vowelMarkNames[vowelSignLangs[languageIndex][vowelIndex]] || 'vowel';
+}
+
+function getConsonantForm(languageIndex, consonantIndex) {
+  return consonantLangs[languageIndex][consonantIndex] + (languageIndex === 5 ? '' : meyEzuthuLangs[languageIndex]);
+}
+
+function combineLetters(languageIndex, consonantIndex, vowelIndex) {
+  const consonant = consonantLangs[languageIndex][consonantIndex];
+  const sign = vowelSignLangs[languageIndex][vowelIndex];
+  // Thai patterns mark the consonant position; some vowels surround it.
+  return languageIndex === 8
+    ? vowelLetterLangs[languageIndex][vowelIndex].replace('◌', consonant)
+    : consonant + sign;
+}
+
+function getAudioFilename(languageIndex, consonantIndex, vowelIndex) {
+  // Existing Thai recordings name the vowel component, not its display placeholder.
+  const vowel = languageIndex === 8
+    ? vowelSignLangs[languageIndex][vowelIndex] : vowelLetterLangs[languageIndex][vowelIndex];
+  // Preserve archive spellings: Punjabi virama and the older, equally valid Malayalam AU form.
+  const consonant = consonantLangs[languageIndex][consonantIndex];
+  const combination = languageIndex === 6 && vowel === 'ഔ'
+    ? consonant + 'ൌ' : combineLetters(languageIndex, consonantIndex, vowelIndex);
+  return `${consonant}${meyEzuthuLangs[languageIndex]} plus ${vowel}. ${combination}.mp3`;
+}
+
+function getRecordingKey(consonant, vowel) {
+  return `${consonant.normalize('NFC')}|${vowel.normalize('NFC')}`;
+}
+
+function getRecordedAudioFilename(languageIndex, consonantIndex, vowelIndex, catalog) {
+  if (!catalog) {
+    catalog = typeof module !== 'undefined' && module.exports ? require('./audio-manifest') : audioRecordings;
+  }
+  const consonant = consonantLangs[languageIndex][consonantIndex];
+  const vowel = languageIndex === 8 ? vowelSignLangs[languageIndex][vowelIndex] : vowelLetterLangs[languageIndex][vowelIndex];
+  const recordings = catalog[languageIndex];
+  const exact = recordings[getRecordingKey(consonant, vowel)];
+  if (exact) return exact;
+  // The archive names this Thai vowel by its component, without the open-syllable carrier.
+  if (languageIndex === 8 && vowel === 'ือ') {
+    return recordings[getRecordingKey(consonant, 'ื')] || null;
+  }
+  return null;
+}
+
+function getPronunciationText(languageIndex, consonantIndex, vowelIndex) {
+  return `${getConsonantForm(languageIndex, consonantIndex)}, ${getSpokenVowel(languageIndex, vowelIndex)}, ${combineLetters(languageIndex, consonantIndex, vowelIndex)}`;
+}
+
+function getSpokenVowel(languageIndex, vowelIndex) {
+  const vowel = vowelLetterLangs[languageIndex][vowelIndex];
+  return languageIndex === 8 ? vowel.replace('◌', 'อ') : vowel;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    lang, vowelLetterLangs, consonantLangs, vowelSignLangs, meyEzuthuLangs,
+    languageDetails, getConsonantForm, combineLetters, getAudioFilename, getPronunciationText,
+    getSpokenVowel, getVowelKind,
+    getRecordingKey, getRecordedAudioFilename,
+  };
+}

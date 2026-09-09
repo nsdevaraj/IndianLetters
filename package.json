@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "audio:map": "node audioutils/map_audio.js",
+    "audio:check": "node audioutils/map_audio.js --check && node audioutils/normalize_audio.js",
+    "audio:normalize": "node audioutils/normalize_audio.js --write"
   },
   "keywords": [],
   "author": "",

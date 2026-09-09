@@ -1,165 +1,360 @@
 const test = require('node:test');
-const assert = require('node:assert');
+const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const letters = require('../src/letters');
 
-// Read the casino.js file
-const casinoJSPath = path.resolve(__dirname, '../src/casino.js');
-const casinoJSContent = fs.readFileSync(casinoJSPath, 'utf8');
+const source = fs.readFileSync(path.resolve(__dirname, '../src/casino.js'), 'utf8');
 
-// Set up the sandbox with necessary mocks
-const sandbox = {
-    Konva: {
-        angleDeg: false,
-        Stage: class { add() {} },
-        Layer: class { add() {} },
-        Group: class {
-            constructor() {}
-            add() {}
-            on() {}
-            getX() { return 0; }
-            getY() { return 0; }
-            rotation() { return 0; }
-        },
-        Wedge: class {
-            constructor() {}
-            add() {}
-            angle() { return 0; }
-            fillPriority() {}
-        },
-        Text: class {
-            constructor() {}
-            cache() {}
-            text() {}
-        },
-        Tween: class {
-            constructor() {}
-            play() {}
-        },
-        Animation: class {
-            constructor() {}
-            start() {}
-        },
-        Easings: {
-            ElasticEaseOut: {}
-        }
-    },
-    vowelLetterLangs: [[[]]],
-    vowelSignLangs: [[]],
-    consonantLangs: [[[]]],
-    lang: [[]],
+class Element {
+  constructor() {
+    this.children = [];
+    this.attributes = {};
+    this.listeners = {};
+    this.style = { setProperty: (name, value) => { this.style[name] = value; } };
+    this.classList = { toggle: (name, value) => { this.attributes[name] = value; } };
+    this.textContent = '';
+    this.disabled = false;
+  }
+  replaceChildren() { this.children = []; }
+  appendChild(child) { this.children.push(child); }
+  append(...children) { this.children.push(...children); }
+  setAttribute(name, value) { this.attributes[name] = String(value); }
+  addEventListener(name, listener) { (this.listeners[name] ||= []).push(listener); }
+  dispatch(name, event = {}) { for (const listener of this.listeners[name] || []) listener({ target: this, ...event }); }
+  setPointerCapture(id) { this.pointerId = id; }
+  hasPointerCapture(id) { return this.pointerId === id; }
+  releasePointerCapture() { this.pointerId = null; }
+  getBoundingClientRect() { return { left: 0, top: 0, width: 440, height: 440 }; }
+}
+
+function createApp(href = 'http://localhost/index.html', options = {}) {
+  const elements = {};
+  const frames = new Map();
+  const audios = [];
+  const utterances = [];
+  const windowElement = new Element();
+  let frameId = 0;
+  let now = 0;
+  let reducedMotion = false;
+  const location = { href };
+  const context = vm.createContext({
+    ...letters,
+    URL,
+    location,
+    performance: { now: () => now },
+    requestAnimationFrame: callback => { frames.set(++frameId, callback); return frameId; },
+    cancelAnimationFrame: id => frames.delete(id),
+    window: Object.assign(windowElement, {
+      matchMedia: () => ({ matches: reducedMotion }),
+      history: { replaceState: (_, __, url) => { location.href = String(url); } },
+      speechSynthesis: {
+        getVoices: () => options.voices || [],
+        speak: utterance => utterances.push(utterance),
+        cancel: () => { utterances.length = 0; },
+      },
+    }),
     document: {
-        getElementById: () => ({
-            innerHTML: '',
-            replaceChildren: () => {},
-            appendChild: () => {},
-            selectedIndex: 0
-        }),
-        createElement: () => ({
-            innerHTML: '',
-            childNodes: [{}],
-            appendChild: () => {}
-        }),
-        addEventListener: () => {}
+      documentElement: new Element(),
+      getElementById: id => (elements[id] ||= new Element()),
+      createElement: () => new Element(),
+      createElementNS: () => new Element(),
+      addEventListener: () => {},
     },
-    window: {
-        innerWidth: 1024,
-        innerHeight: 768,
-        addEventListener: () => {},
-        onresize: null,
-        speechSynthesis: {
-            speak: () => {}
-        }
-    },
-    location: {
-        href: 'http://localhost/?l=0'
-    },
-    meyEzuthuLangs: ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''],
     Audio: class {
-        constructor() {
-            this.playbackRate = 1;
-        }
-        play() {}
+      constructor(url) { this.url = url; this.paused = false; audios.push(this); }
+      play() { return options.play ? options.play(this) : Promise.resolve(); }
+      pause() { this.paused = true; }
     },
     SpeechSynthesisUtterance: class {
-        constructor() {}
+      constructor(text) { this.text = text; }
     },
-    setTimeout: (fn) => {}, // Mock setTimeout to prevent async activity
-    setInterval: global.setInterval,
-    parseInt: global.parseInt,
-    Math: global.Math
-};
+  });
+  vm.runInContext(source, context);
+  context.init();
+  return {
+    context, elements, audios, utterances, frames, location, window: windowElement,
+    setReducedMotion: () => { reducedMotion = true; },
+    frame: time => {
+      now = time;
+      const pending = [...frames.values()];
+      frames.clear();
+      pending.forEach(callback => callback(time));
+    },
+    state: expression => vm.runInContext(expression, context),
+  };
+}
 
-// Create the context
-const context = vm.createContext(sandbox);
+for (const [values, expected] of [[[], 0], [[5.5], 5.5], [[1, 2, 3, 4, 5], 3], [[-10, 10], 0], [[1.5, 2.5, 3.5], 2.5]]) {
+  test(`average angular velocity: ${JSON.stringify(values)}`, () => {
+    assert.equal(createApp().context.getAverageAngularVelocity(values), expected);
+  });
+}
 
-// Execute the casino.js in the context
-vm.runInContext(casinoJSContent, context);
-
-test('getAverageAngularVelocity - returns 0 for empty array', () => {
-  const velocities = [];
-  const result = sandbox.getAverageAngularVelocity(velocities);
-  assert.strictEqual(result, 0);
-});
-
-test('getAverageAngularVelocity - returns the single value for single-element array', () => {
-  const velocities = [5.5];
-  const result = sandbox.getAverageAngularVelocity(velocities);
-  assert.strictEqual(result, 5.5);
-});
-
-test('getAverageAngularVelocity - returns the average for multiple values', () => {
-  const velocities = [1, 2, 3, 4, 5];
-  const result = sandbox.getAverageAngularVelocity(velocities);
-  assert.strictEqual(result, 3);
-});
-
-test('getAverageAngularVelocity - handles negative values', () => {
-  const velocities = [-10, 10];
-  const result = sandbox.getAverageAngularVelocity(velocities);
-  assert.strictEqual(result, 0);
-});
-
-test('getAverageAngularVelocity - handles floating point values', () => {
-  const velocities = [1.5, 2.5, 3.5];
-  const result = sandbox.getAverageAngularVelocity(velocities);
-  assert.strictEqual(result, 2.5);
-});
-
-test('assignLanguage - correctly sets meyEzuthu for different languages', () => {
-  // Mock data for vowelLetterLangs
-  sandbox.vowelLetterLangs = [
-    [['அ'], ['a']],
-    [['అ'], ['a']],
-    [['ಅ'], ['a']],
-    [['অ'], ['a']],
-    [['अ'], ['a']],
-    [['ਅ'], ['a']],
-    [['അ'], ['a']],
-    [['અ'], ['a']],
-    [['ะ'], ['a']],
-    [['අ'], ['a']]
-  ];
-  sandbox.vowelSignLangs = [[], [], [], [], [], [], [], [], [], []];
-  sandbox.consonantLangs = [
-    [['க'], ['ka']],
-    [['క'], ['ka']],
-    [['ಕ'], ['ka']],
-    [['ক'], ['ka']],
-    [['क'], ['ka']],
-    [['ਕ'], ['ka']],
-    [['ക'], ['ka']],
-    [['ક'], ['ka']],
-    [['ก'], ['ka']],
-    [['ක'], ['ka']]
-  ];
-
-  const expectedMeyEzuthu = ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''];
-
-  for (let i = 0; i < 10; i++) {
-    vm.runInContext(`currentLang = ${i}`, context);
-    sandbox.assignLanguage();
-    assert.strictEqual(vm.runInContext('meyEzuthu', context), expectedMeyEzuthu[i], `Language index ${i} failed`);
+test('language links select by value, not the reordered dropdown position', () => {
+  for (let index = 0; index < letters.lang.length; index++) {
+    const app = createApp(`http://localhost/?l=${index}`);
+    assert.equal(app.state('currentLang'), index);
+    assert.equal(app.elements.selectLanguage.value, String(index));
+    assert.equal(app.elements.consonDiv.children[0].textContent, letters.getConsonantForm(index, 0));
+    assert.equal(app.elements.consonDiv.attributes.lang, letters.languageDetails[index].code.split('-')[0]);
   }
+});
+
+test('invalid language links safely default to Tamil', () => {
+  const { context } = createApp();
+  for (const value of ['', '-1', '10', '3junk', '1.5', 'null', '%20']) {
+    assert.equal(context.getLanguageIndex(`http://localhost/?l=${value}`), 0);
+  }
+});
+
+test('initialization is idempotent and does not autoplay or animate', () => {
+  const app = createApp();
+  app.context.init();
+  assert.equal(app.audios.length, 0);
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.elements.spinButton.listeners.click.length, 1);
+  assert.equal(app.elements.consonDiv.children.length, 18);
+  assert.equal(app.elements.resultLetter.textContent, 'க');
+});
+
+test('choosing consonants and vowels updates all result surfaces and pressed states', async () => {
+  const app = createApp();
+  app.elements.consonDiv.children[8].dispatch('click');
+  app.elements.vowelDiv.children[1].dispatch('click');
+  await Promise.resolve();
+  assert.equal(app.elements.resultConsonant.textContent, 'ப்');
+  assert.equal(app.elements.resultVowel.textContent, 'ஆ');
+  assert.equal(app.elements.resultLetter.textContent, 'பா');
+  assert.equal(app.elements.centerText.textContent, 'பா');
+  for (const container of [app.elements.consonDiv, app.elements.vowelDiv]) {
+    assert.equal(container.children.filter(button => button.attributes['aria-pressed'] === 'true').length, 1);
+  }
+  assert.equal(app.audios[0].paused, true);
+  assert.ok(decodeURIComponent(app.audios[1].url).endsWith('ப் plus ஆ. பா.mp3'));
+});
+
+test('resize preserves selection and does not duplicate the wheel', () => {
+  const app = createApp();
+  app.context.selectConsonant(13);
+  app.context.selectVowel(4);
+  app.window.dispatch('resize');
+  assert.equal(app.elements.centerText.textContent, 'வு');
+  assert.equal(app.elements.wheelSegments.children.length, 12);
+});
+
+test('pointer selection matches all vowel centers through both rotation directions', () => {
+  const { context } = createApp();
+  for (const vowels of letters.vowelLetterLangs) {
+    for (let index = 0; index < vowels.length; index++) {
+      for (const turns of [-4, -1, 0, 1, 4]) {
+        const angle = -index * 2 * Math.PI / vowels.length + turns * 2 * Math.PI;
+        assert.equal(context.getVowelIndex(angle, vowels.length), index);
+      }
+    }
+  }
+});
+
+test('spin stops at the target, updates the result, and stops requesting frames', () => {
+  const app = createApp();
+  app.context.animateToVowel(5);
+  assert.equal(app.elements.spinButton.disabled, true);
+  assert.equal(app.frames.size, 1);
+  app.frame(850);
+  assert.equal(app.frames.size, 1);
+  app.frame(1700);
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.elements.spinButton.disabled, false);
+  assert.equal(app.elements.resultLetter.textContent, 'கூ');
+  assert.equal(app.context.getVowelIndex(app.state('rotation'), 12), 5);
+  assert.equal(app.elements.wheelSegments.children[5].attributes['is-selected'], true);
+});
+
+test('negative spin completes and reduced motion skips animation', () => {
+  const app = createApp();
+  app.context.animateToVowel(9, 1, -1);
+  app.frame(800);
+  assert.ok(app.state('rotation') < 0);
+  app.frame(1700);
+  assert.equal(app.elements.resultLetter.textContent, 'கொ');
+  app.setReducedMotion();
+  app.context.animateToVowel(2);
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.elements.resultLetter.textContent, 'கி');
+});
+
+test('language switching cancels in-flight animation and audio and preserves unrelated URL parts', () => {
+  const app = createApp('http://localhost/?theme=light#letters');
+  app.context.selectVowel(3);
+  app.context.animateToVowel(9);
+  app.elements.selectLanguage.value = '6';
+  app.elements.selectLanguage.dispatch('change');
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.elements.resultLetter.textContent, 'ക');
+  assert.equal(app.elements.wheelSegments.children.length, 18);
+  assert.equal(app.elements.consonDiv.children.length, 38);
+  assert.equal(app.location.href, 'http://localhost/?theme=light&l=6#letters');
+  assert.ok(app.audios.every(audio => audio.paused));
+});
+
+test('choosing a vowel interrupts a spin without allowing its stale result to win', () => {
+  const app = createApp();
+  app.context.spinWheel();
+  app.elements.vowelDiv.children[3].dispatch('click');
+  app.frame(2000);
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.elements.resultLetter.textContent, 'கீ');
+});
+
+test('wheel clicks choose a vowel and pointer cancellation restores the selection', () => {
+  const app = createApp();
+  const event = {
+    button: 0, pointerId: 1, clientX: 360, clientY: 220, timeStamp: 0,
+    target: { closest: () => ({ dataset: { index: '3' } }) },
+  };
+  app.context.startDrag(event);
+  app.context.endDrag({ ...event, timeStamp: 50 });
+  assert.equal(app.elements.resultLetter.textContent, 'கீ');
+  app.context.startDrag(event);
+  app.context.moveDrag({ ...event, clientX: 220, clientY: 360, timeStamp: 100 });
+  app.context.cancelDrag({ pointerId: 1 });
+  assert.equal(app.state('drag'), null);
+  assert.equal(app.context.getVowelIndex(app.state('rotation'), 12), 3);
+  assert.equal(app.elements.spinButton.disabled, false);
+});
+
+test('dragging counterclockwise releases into a spin and settles', () => {
+  const app = createApp();
+  const event = {
+    button: 0, pointerId: 1, clientX: 360, clientY: 220, timeStamp: 0,
+    target: { closest: () => ({ dataset: { index: '3' } }) },
+  };
+  app.context.startDrag(event);
+  app.context.moveDrag({ ...event, clientX: 220, clientY: 80, timeStamp: 100 });
+  assert.ok(app.state('rotation') < 0);
+  app.context.endDrag({ ...event, timeStamp: 110 });
+  app.frame(1700);
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.context.getVowelIndex(app.state('rotation'), 12), app.state('vowelIndex'));
+});
+
+test('sound off cancels playback, persists across languages, and disables replay', () => {
+  const app = createApp();
+  app.context.selectVowel(1);
+  app.elements.soundButton.dispatch('click');
+  assert.equal(app.audios[0].paused, true);
+  assert.equal(app.elements.soundButton.attributes['aria-pressed'], 'false');
+  assert.equal(app.elements.listenButton.disabled, true);
+  app.context.setCurrentLang({ value: '3' });
+  app.context.selectVowel(4);
+  assert.equal(app.audios.length, 1);
+  app.elements.soundButton.dispatch('click');
+  assert.equal(app.elements.listenButton.disabled, false);
+});
+
+test('autoplay rejection gives a recovery message, not an unhandled rejection', async () => {
+  const app = createApp(undefined, { play: () => Promise.reject({ name: 'NotAllowedError' }) });
+  await app.context.playAudio();
+  assert.match(app.elements.audioStatus.textContent, /blocked playback/);
+  assert.equal(app.utterances.length, 0);
+});
+
+test('missing recordings use only a matching-language device voice', async () => {
+  const app = createApp('http://localhost/?l=4', {
+    voices: [{ lang: 'en-US' }, { lang: 'hi-IN' }],
+  });
+  app.context.selectConsonant(33);
+  assert.equal(app.utterances.length, 1);
+  assert.equal(app.audios.length, 0);
+  assert.equal(app.utterances[0].lang, 'hi-IN');
+  assert.equal(app.utterances[0].text, 'ड़्, अ, ड़');
+  app.elements.soundButton.dispatch('click');
+  assert.equal(app.utterances.length, 0);
+});
+
+test('missing recordings without a suitable voice are visibly reported', async () => {
+  const app = createApp('http://localhost/?l=9', {
+    voices: [{ lang: 'en-US' }],
+  });
+  await app.context.playAudio();
+  assert.match(app.elements.audioStatus.textContent, /No recording is bundled/);
+  assert.equal(app.utterances.length, 0);
+});
+
+test('a recording decode failure is not misreported as a missing device voice', async () => {
+  const app = createApp(undefined, {
+    play: () => Promise.reject({ name: 'NotSupportedError' }),
+    voices: [{ lang: 'ta-IN' }],
+  });
+  await app.context.playAudio();
+  assert.match(app.elements.audioStatus.textContent, /recording could not be loaded or played/);
+  assert.equal(app.utterances.length, 0);
+  assert.equal(app.audios[0].paused, true);
+});
+
+test('a stale audio rejection cannot speak the previous selection', async () => {
+  let reject;
+  const app = createApp(undefined, {
+    play: () => new Promise((_, fail) => { reject = fail; }),
+    voices: [{ lang: 'ta-IN' }],
+  });
+  const pending = app.context.playAudio();
+  app.context.setCurrentLang({ value: '3' });
+  reject({ name: 'NotSupportedError' });
+  await pending;
+  assert.equal(app.utterances.length, 0);
+  assert.equal(app.elements.audioStatus.textContent, '');
+});
+
+test('Sinhala speech uses native text and a Sinhala voice, not English phonetics', async () => {
+  const app = createApp('http://localhost/?l=9', { voices: [{ lang: 'si-LK' }] });
+  await app.context.playAudio();
+  assert.equal(app.audios.length, 0);
+  assert.equal(app.utterances[0].text, 'ක්, අ, ක');
+  assert.equal(app.utterances[0].lang, 'si-LK');
+});
+
+test('media errors after playback starts are surfaced instead of leaving a playing status', async () => {
+  const app = createApp();
+  await app.context.playAudio();
+  app.audios[0].onerror();
+  assert.equal(app.audios[0].paused, true);
+  assert.match(app.elements.audioStatus.textContent, /recording could not be loaded or played/);
+});
+
+test('pagehide cancels animation and keeps the wheel aligned for back/forward restoration', () => {
+  const app = createApp();
+  app.context.selectVowel(4);
+  app.context.spinWheel();
+  app.frame(500);
+  app.window.dispatch('pagehide');
+  assert.equal(app.frames.size, 0);
+  assert.equal(app.context.getVowelIndex(app.state('rotation'), 12), 4);
+  assert.equal(app.elements.resultLetter.textContent, 'கு');
+});
+
+test('the UI distinguishes vowel signs and Thai patterns rather than calling every choice a vowel', () => {
+  const app = createApp('http://localhost/?l=7');
+  assert.equal(app.elements.vowelHeading.textContent, 'Add a vowel or sign');
+  assert.equal(app.elements.vowelCount.textContent, 'Choose from 16 vowels and 3 signs');
+  assert.match(app.elements.vowelDiv.children[16].title, /candrabindu/);
+  app.context.setCurrentLang({ value: '8' });
+  assert.equal(app.elements.vowelHeading.textContent, 'Choose a vowel pattern');
+  assert.match(app.elements.languageNote.textContent, /Final-consonant patterns and tone rules are not covered/);
+  app.context.selectVowel(5);
+  assert.equal(app.elements.centerText.textContent, 'กือ');
+  assert.equal(app.elements.resultVowel.textContent, '◌ือ');
+});
+
+test('Kannada and Thai playback uses legacy file names without changing the written result', () => {
+  const app = createApp('http://localhost/?l=2');
+  app.context.selectVowel(7);
+  assert.equal(app.elements.resultLetter.textContent, 'ಕೆ');
+  assert.ok(decodeURIComponent(app.audios[0].url).endsWith('ಕ್ plus ಎ. ಕೄ.mp3'));
+  app.context.setCurrentLang({ value: '8' });
+  app.context.selectVowel(5);
+  assert.equal(app.elements.resultLetter.textContent, 'กือ');
+  assert.ok(decodeURIComponent(app.audios[1].url).endsWith('ก plus ื. กื.mp3'));
+  assert.equal(app.utterances.length, 0);
 });

@@ -1,39 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <script src="https://unpkg.com/konva@8.4.3/konva.min.js"></script>
-    <script src="src/letters.js"></script>
-    <script src="src/casino.js"></script> 
     <meta charset="utf-8" />
-    <title>Indian Letters - Casino</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-  </head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#6446ad" />
+    <title>Indian Letters - Play &amp; Learn</title>
+    <script src="src/theme.js"></script>
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="src/letters.js"></script>
+    <script defer src="src/audio-manifest.js"></script>
+    <script defer src="src/casino.js"></script>
+  </head>
   <body>
-    <div class="controls-container">
-      <div class="wrapper" id="consonDiv"></div>
-      <div class="center">
-        <label for="selectLanguage">Choose Language: </label>
-        <select name="langs" id="selectLanguage" onchange="setCurrentLang(this)">
-          <option value="0">தமிழ் - Tamil</option>
-          <option value="1">తెలుగు - Telugu</option>
-          <option value="2">ಕನ್ನಡ - Kannada</option>
-          <option value="6">മലയാളം - Malayalam</option>
-          <option value="3">বাংলা - Bengali</option>
-          <option value="5">ਗੁਰਮੁਖੀ - Punjabi</option>
-          <option value="7">ગુજરાતી - Gujarati</option>
-          <option value="4">हिंदी - Hindi</option>
-          <option value="8">ไทย - Thai</option>
-          <option value="9">සිංහල - Sinhala</option>
-          <!--  <option value="9">ଘୃଣା କରନ୍ତି</option> -->
-        </select>
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="Indian Letters home">
+        <span class="brand-mark" aria-hidden="true">IL</span>
+        <span>Indian Letters<small>A little play. A lot of learning.</small></span>
+      </a>
+      <div class="header-controls">
+        <div class="language-picker">
+          <label for="selectLanguage">Choose your language</label>
+          <select name="langs" id="selectLanguage">
+            <option value="0" lang="ta">தமிழ் - Tamil</option>
+            <option value="1" lang="te">తెలుగు - Telugu</option>
+            <option value="2" lang="kn">ಕನ್ನಡ - Kannada</option>
+            <option value="6" lang="ml">മലയാളം - Malayalam</option>
+            <option value="3" lang="bn">বাংলা - Bengali</option>
+            <option value="5" lang="pa">ਗੁਰਮੁਖੀ - Punjabi</option>
+            <option value="7" lang="gu">ગુજરાતી - Gujarati</option>
+            <option value="4" lang="hi">हिंदी - Hindi</option>
+            <option value="8" lang="th">ไทย - Thai</option>
+            <option value="9" lang="si">සිංහල - Sinhala</option>
+          </select>
+        </div>
+        <button id="themeButton" class="quiet-button theme-toggle" type="button" aria-pressed="false" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+          Dark theme
+        </button>
       </div>
-    </div>
-    <div id="container"></div>
-    <script>
-      init();
-    </script>
+    </header>
+
+    <main>
+      <div class="intro">
+        <p class="eyebrow">EXPLORE. COMBINE. LISTEN.</p>
+        <h1>Bring letters together.</h1>
+        <p>Pick a consonant, then spin the wheel or choose a sound below to explore a combination.</p>
+      </div>
+      <p id="languageNote" class="language-note"></p>
+
+      <div class="learning-layout">
+        <section class="panel consonant-panel" aria-labelledby="consonantHeading">
+          <div class="section-heading">
+            <span class="step" aria-hidden="true">1</span>
+            <div>
+              <h2 id="consonantHeading">Choose a consonant</h2>
+              <p id="consonantCount"></p>
+            </div>
+          </div>
+          <div class="letter-grid" id="consonDiv" role="group" aria-label="Consonants"></div>
+          <p class="panel-tip">The highlighted letter is your starting sound.</p>
+        </section>
+
+        <section class="panel wheel-panel" aria-labelledby="vowelHeading">
+          <div class="section-heading">
+            <span class="step" aria-hidden="true">2</span>
+            <div>
+              <h2 id="vowelHeading">Add a vowel</h2>
+              <p>Spin, drag, or pick one below.</p>
+            </div>
+            <button id="soundButton" class="quiet-button" type="button" aria-pressed="true">Sound on</button>
+          </div>
+          <div class="wheel-container" id="container">
+            <svg id="letterWheel" viewBox="0 0 440 440" aria-hidden="true">
+              <circle class="wheel-rim" cx="220" cy="220" r="207" />
+              <g id="wheelSegments"></g>
+              <circle class="wheel-inner" cx="220" cy="220" r="112" />
+              <path class="wheel-pointer" d="M208 9 L232 9 L220 33 Z" />
+            </svg>
+            <div class="wheel-center" aria-hidden="true">
+              <span class="center-label">YOUR LETTER</span>
+              <span id="centerText" class="script-text"></span>
+            </div>
+          </div>
+          <button id="spinButton" class="primary-button" type="button">
+            <span aria-hidden="true">&#8635;</span> <span id="spinLabel">Spin the wheel</span>
+          </button>
+          <div class="vowel-options">
+            <p id="vowelCount">Or choose a vowel</p>
+            <div id="vowelDiv" class="vowel-grid" role="group" aria-label="Vowels"></div>
+          </div>
+        </section>
+
+        <section class="panel result-panel" aria-labelledby="resultHeading">
+          <div>
+            <p class="eyebrow">SOUND IT OUT</p>
+            <h2 id="resultHeading">Your letter combination</h2>
+          </div>
+          <div id="result" class="equation" role="status" aria-live="polite" aria-atomic="true">
+            <span id="resultConsonant" class="script-text"></span>
+            <span class="operator">+</span>
+            <span id="resultVowel" class="script-text"></span>
+            <span class="operator">=</span>
+            <strong id="resultLetter" class="script-text"></strong>
+          </div>
+          <button id="listenButton" class="secondary-button" type="button">Listen again</button>
+          <p id="audioStatus" class="audio-status" role="status" aria-live="polite"></p>
+        </section>
+      </div>
+      <noscript><p class="panel">Please enable JavaScript to combine letters and use the wheel.</p></noscript>
+    </main>
+    <footer>Learn at your own pace. Every spin is a new discovery.</footer>
   </body>
 </html>

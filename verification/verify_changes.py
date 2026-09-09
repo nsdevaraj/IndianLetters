@@ -27,7 +27,7 @@ def verify_changes():
         # Focus the button and take a screenshot to verify focus styles
         # Find the first button
         try:
-            page.locator(".btn").first.focus()
+            page.locator("#consonDiv button").first.focus()
             page.screenshot(path="verification/verification_focus.png", clip={"x": 0, "y": 0, "width": 1024, "height": 300})
             print(f"Focus screenshot saved to verification/verification_focus.png")
         except Exception as e:

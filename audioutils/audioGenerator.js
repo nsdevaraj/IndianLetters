@@ -6,16 +6,17 @@ require('dotenv').config();
 const fs = require('fs');
 const util = require('util');
 const { letters } = require('./data');
+const { getAudioFilename, getPronunciationText } = require('../src/letters');
 const client = new textToSpeech.TextToSpeechClient({
     keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
 });
 
 
 
-const convertTextToSpeech = async (text, lang) => {
+const convertTextToSpeech = async (text, lang, filename) => {
     const request = {
         audioConfig: {
-            audioEncoding: "LINEAR16",
+            audioEncoding: "MP3",
             effectsProfileId: [
                 "small-bluetooth-speaker-class-device"
             ],
@@ -33,7 +34,7 @@ const convertTextToSpeech = async (text, lang) => {
     const [response] = await client.synthesizeSpeech(request);
 
     const writeFile = util.promisify(fs.writeFile);
-    await writeFile(`./audio/${lang}/${text}.mp3`, response.audioContent, 'binary');
+    await writeFile(`./audio/${lang}/${filename}`, response.audioContent, 'binary');
 }
 
 
@@ -46,10 +47,9 @@ const saveAudio = async () => {
         }
         letterConf.consonants.forEach((consonant, consonantIndex) => {
             letterConf.vowels.forEach((vowel, vowelIndex) => {
-                const combinationIndex = (consonantIndex * letterConf.vowels.length) + vowelIndex;
-                const combination = letterConf.combinations[combinationIndex]
-                const text = `${consonant} plus ${vowel}. ${combination}`
-                promises.push(convertTextToSpeech(text, letterConf.lang));
+                const text = getPronunciationText(8, consonantIndex, vowelIndex);
+                const filename = getAudioFilename(8, consonantIndex, vowelIndex);
+                promises.push(convertTextToSpeech(text, letterConf.lang, filename));
             });
         });
     })

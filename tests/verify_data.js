@@ -26,19 +26,13 @@ lang.forEach((l, i) => {
         return;
     }
 
-    // Check vowels: [characters, phonetics]
-    if (vowels[0].length !== vowels[1].length) {
-        errors.push(`${l} (index ${i}): Vowel characters (${vowels[0].length}) and phonetics (${vowels[1].length}) length mismatch`);
-    }
-
-    // Check consonants: [characters, phonetics]
-    if (consonants[0].length !== consonants[1].length) {
-        errors.push(`${l} (index ${i}): Consonant characters (${consonants[0].length}) and phonetics (${consonants[1].length}) length mismatch`);
+    if (!vowels.every(vowel => typeof vowel === 'string') || !consonants.every(consonant => typeof consonant === 'string')) {
+        errors.push(`${l} (index ${i}): Expected flat arrays of native-script letters`);
     }
 
     // Check vowel signs: just a flat array of signs
-    if (vowelSigns.length !== vowels[0].length) {
-        errors.push(`${l} (index ${i}): Vowel signs (${vowelSigns.length}) and vowel letters (${vowels[0].length}) length mismatch`);
+    if (vowelSigns.length !== vowels.length) {
+        errors.push(`${l} (index ${i}): Vowel signs (${vowelSigns.length}) and vowel letters (${vowels.length}) length mismatch`);
     }
 });
 
