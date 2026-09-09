@@ -8,3 +8,8 @@
 @font-face { font-family: 'Noto Sans Gujarati'; src: url('../fonts/NotoSansGujarati.ttf') format('truetype'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Noto Sans Thai'; src: url('../fonts/NotoSansThai.ttf') format('truetype'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Noto Sans Sinhala'; src: url('../fonts/NotoSansSinhala.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Noto Sans Myanmar'; src: url('../fonts/NotoSansMyanmar.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Noto Sans Lao'; src: url('../fonts/NotoSansLao.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Noto Sans Javanese'; src: url('../fonts/NotoSansJavanese.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Noto Sans Ethiopic'; src: url('../fonts/NotoSansEthiopic.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Noto Sans Khmer'; src: url('../fonts/NotoSansKhmer.ttf') format('truetype'); font-weight: 400; font-display: swap; }

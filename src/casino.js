@@ -16,7 +16,7 @@ let segments = [];
 
 function getLanguageIndex(href) {
   const value = new URL(href).searchParams.get('l');
-  return value !== null && /^[0-9]$/.test(value) ? Number(value) : 0;
+  return value !== null && /^(0|[1-9]\d*)$/.test(value) && Number(value) < languageDetails.length ? Number(value) : 0;
 }
 
 function normalizeAngle(angle) {
@@ -323,13 +323,17 @@ function assignLanguage() {
   const consonants = consonantLangs[currentLang];
   const vowels = vowelLetterLangs[currentLang];
   const signCount = vowels.filter((_, index) => !getVowelKind(currentLang, index).startsWith('vowel')).length;
-  const choiceType = currentLang === 8 ? 'vowel patterns' : signCount ? 'vowels and signs' : 'vowels';
-  elements.consonantCount.textContent = `${consonants.length} letters to explore`;
+  const orders = details.composition === 'orders';
+  const patterns = details.composition === 'pattern';
+  const choiceType = orders ? 'vowel orders' : patterns ? 'vowel patterns' : signCount ? 'vowels and signs' : 'vowels';
+  elements.consonantHeading.textContent = orders ? 'Choose a consonant series' : 'Choose a consonant';
+  elements.consonDiv.setAttribute('aria-label', orders ? 'Consonant series' : 'Consonants');
+  elements.consonantCount.textContent = `${consonants.length} ${orders ? 'series' : 'letters'} to explore`;
   elements.vowelCount.textContent = signCount
     ? `Choose from ${vowels.length - signCount} vowels and ${signCount} signs`
     : `Or choose one of ${vowels.length} ${choiceType}`;
   elements.vowelDiv.setAttribute('aria-label', choiceType);
-  elements.vowelHeading.textContent = currentLang === 8 ? 'Choose a vowel pattern' : signCount ? 'Add a vowel or sign' : 'Add a vowel';
+  elements.vowelHeading.textContent = orders ? 'Choose a vowel order' : patterns ? 'Choose a vowel pattern' : signCount ? 'Add a vowel or sign' : 'Add a vowel';
   elements.languageNote.textContent = details.note;
   renderButtons(elements.consonDiv, consonants, consonantIndex, selectConsonant, true);
   renderButtons(elements.vowelDiv, vowels, vowelIndex, selectVowel, false);
@@ -356,7 +360,7 @@ function init() {
     'selectLanguage', 'consonDiv', 'vowelDiv', 'letterWheel', 'wheelSegments',
     'centerText', 'result', 'resultConsonant', 'resultVowel', 'resultLetter',
     'consonantCount', 'vowelCount', 'spinButton', 'spinLabel', 'listenButton',
-    'soundButton', 'audioStatus', 'vowelHeading', 'languageNote',
+    'soundButton', 'audioStatus', 'vowelHeading', 'languageNote', 'consonantHeading',
   ].map(id => [id, document.getElementById(id)]));
   currentLang = getLanguageIndex(location.href);
   assignLanguage();

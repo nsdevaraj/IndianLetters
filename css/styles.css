@@ -151,7 +151,8 @@ select {
   font-family: var(--script-font), 'Noto Sans Tamil', 'Noto Sans Telugu',
     'Noto Sans Kannada', 'Noto Sans Bengali', 'Noto Sans Devanagari',
     'Noto Sans Gurmukhi', 'Noto Sans Malayalam', 'Noto Sans Gujarati',
-    'Noto Sans Thai', 'Noto Sans Sinhala', sans-serif;
+    'Noto Sans Thai', 'Noto Sans Sinhala', 'Noto Sans Myanmar', 'Noto Sans Lao',
+    'Noto Sans Javanese', 'Noto Sans Ethiopic', 'Noto Sans Khmer', sans-serif;
   font-size: 15px;
   cursor: pointer;
 }

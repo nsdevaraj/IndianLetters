@@ -1,8 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const {
-    lang, consonantLangs, vowelLetterLangs, vowelSignLangs, meyEzuthuLangs,
-    languageDetails, getRecordingKey, getAudioFilename, getRecordedAudioFilename,
+    lang, consonantLangs, vowelLetterLangs, meyEzuthuLangs,
+    languageDetails, getRecordingKey, getAudioFilename, getRecordedAudioFilename, getRecordingVowel,
 } = require('../src/letters');
 
 const audioRoot = path.resolve(__dirname, '../audio');
@@ -23,8 +23,8 @@ function buildCatalog(root = audioRoot) {
         if (!fs.existsSync(directory)) return {};
         const preferred = new Map();
         consonantLangs[language].forEach((consonant, c) => {
-            vowelLetterLangs[language].forEach((vowel, v) => {
-                const component = language === 8 ? vowelSignLangs[language][v] : vowel;
+            vowelLetterLangs[language].forEach((_, v) => {
+                const component = getRecordingVowel(language, v);
                 preferred.set(getRecordingKey(consonant, component), getAudioFilename(language, c, v));
             });
         });

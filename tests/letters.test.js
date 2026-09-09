@@ -15,7 +15,7 @@ for (const [index, details] of letters.languageDetails.entries()) {
     assert.equal(new Set(vowels).size, vowels.length);
     const script = new RegExp(`^\\p{Script=${details.script}}*$`, 'u');
     for (const text of [...consonants, ...vowels, ...signs, letters.meyEzuthuLangs[index]]) {
-      assert.match(index === 8 ? text.replace('◌', '') : text, script, `Unexpected script in ${text}`);
+      assert.match(details.composition === 'pattern' ? text.replace('◌', '') : text, script, `Unexpected script in ${text}`);
     }
     for (let consonant = 0; consonant < consonants.length; consonant++) {
       for (let vowel = 0; vowel < vowels.length; vowel++) {

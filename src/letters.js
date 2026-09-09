@@ -66,6 +66,7 @@ var languageDetails = [
   },
   {
     code: 'pa-IN', font: 'Noto Sans Gurmukhi', script: 'Gurmukhi',
+    bareConsonants: true,
     note: 'Includes dotted consonant extensions. Ordinary consonant letters are shown without virama; the three vowel carriers are represented through the ten vowel choices.',
   },
   {
@@ -80,6 +81,7 @@ var languageDetails = [
   },
   {
     code: 'th-TH', font: 'Noto Sans Thai', script: 'Thai',
+    composition: 'pattern', vowelCarrier: 'อ', recordingVowelAliases: { 'ือ': 'ื' },
     note: 'All 44 consonants, including obsolete ฃ and ฅ, with 14 common vowel patterns. ◌ marks the consonant position. Final-consonant patterns and tone rules are not covered.',
   },
   {
@@ -96,7 +98,9 @@ var vowelMarkNames = {
 };
 
 function getVowelKind(languageIndex, vowelIndex) {
-  if (languageIndex === 8) return 'vowel pattern';
+  const details = languageDetails[languageIndex];
+  if (details.composition === 'pattern') return 'vowel pattern';
+  if (details.composition === 'orders') return 'vowel order';
   if (languageDetails[languageIndex].extendedVowels?.includes(vowelLetterLangs[languageIndex][vowelIndex])) {
     return 'vowel (Sanskrit-derived)';
   }
@@ -104,22 +108,36 @@ function getVowelKind(languageIndex, vowelIndex) {
 }
 
 function getConsonantForm(languageIndex, consonantIndex) {
-  return consonantLangs[languageIndex][consonantIndex] + (languageIndex === 5 ? '' : meyEzuthuLangs[languageIndex]);
+  return consonantLangs[languageIndex][consonantIndex] +
+    (languageDetails[languageIndex].bareConsonants ? '' : meyEzuthuLangs[languageIndex]);
 }
 
 function combineLetters(languageIndex, consonantIndex, vowelIndex) {
+  const details = languageDetails[languageIndex];
   const consonant = consonantLangs[languageIndex][consonantIndex];
   const sign = vowelSignLangs[languageIndex][vowelIndex];
-  // Thai patterns mark the consonant position; some vowels surround it.
-  return languageIndex === 8
-    ? vowelLetterLangs[languageIndex][vowelIndex].replace('◌', consonant)
-    : consonant + sign;
+  if (details.composition === 'orders') {
+    return Array.from(details.syllables[consonantIndex])[vowelIndex];
+  }
+  const special = details.combinationOverrides?.[getRecordingKey(consonant, sign)];
+  if (special) return special;
+  // Patterns place vowels around a consonant without assuming Unicode storage order.
+  let combination = details.composition === 'pattern'
+    ? vowelLetterLangs[languageIndex][vowelIndex].replace('◌', consonant) : consonant + sign;
+  if (details.tallAAConsonants?.includes(consonant)) {
+    combination = combination.replaceAll('ာ', 'ါ');
+  }
+  return combination;
+}
+
+function getRecordingVowel(languageIndex, vowelIndex) {
+  return languageDetails[languageIndex].composition === 'pattern'
+    ? vowelSignLangs[languageIndex][vowelIndex] || getSpokenVowel(languageIndex, vowelIndex)
+    : vowelLetterLangs[languageIndex][vowelIndex];
 }
 
 function getAudioFilename(languageIndex, consonantIndex, vowelIndex) {
-  // Existing Thai recordings name the vowel component, not its display placeholder.
-  const vowel = languageIndex === 8
-    ? vowelSignLangs[languageIndex][vowelIndex] : vowelLetterLangs[languageIndex][vowelIndex];
+  const vowel = getRecordingVowel(languageIndex, vowelIndex);
   // Preserve archive spellings: Punjabi virama and the older, equally valid Malayalam AU form.
   const consonant = consonantLangs[languageIndex][consonantIndex];
   const combination = languageIndex === 6 && vowel === 'ഔ'
@@ -136,13 +154,13 @@ function getRecordedAudioFilename(languageIndex, consonantIndex, vowelIndex, cat
     catalog = typeof module !== 'undefined' && module.exports ? require('./audio-manifest') : audioRecordings;
   }
   const consonant = consonantLangs[languageIndex][consonantIndex];
-  const vowel = languageIndex === 8 ? vowelSignLangs[languageIndex][vowelIndex] : vowelLetterLangs[languageIndex][vowelIndex];
+  const vowel = getRecordingVowel(languageIndex, vowelIndex);
   const recordings = catalog[languageIndex];
   const exact = recordings[getRecordingKey(consonant, vowel)];
   if (exact) return exact;
-  // The archive names this Thai vowel by its component, without the open-syllable carrier.
-  if (languageIndex === 8 && vowel === 'ือ') {
-    return recordings[getRecordingKey(consonant, 'ื')] || null;
+  const alias = languageDetails[languageIndex].recordingVowelAliases?.[vowel];
+  if (alias) {
+    return recordings[getRecordingKey(consonant, alias)] || null;
   }
   return null;
 }
@@ -153,7 +171,8 @@ function getPronunciationText(languageIndex, consonantIndex, vowelIndex) {
 
 function getSpokenVowel(languageIndex, vowelIndex) {
   const vowel = vowelLetterLangs[languageIndex][vowelIndex];
-  return languageIndex === 8 ? vowel.replace('◌', 'อ') : vowel;
+  const details = languageDetails[languageIndex];
+  return details.composition === 'pattern' ? vowel.replace('◌', details.vowelCarrier) : vowel;
 }
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -161,6 +180,6 @@ if (typeof module !== 'undefined' && module.exports) {
     lang, vowelLetterLangs, consonantLangs, vowelSignLangs, meyEzuthuLangs,
     languageDetails, getConsonantForm, combineLetters, getAudioFilename, getPronunciationText,
     getSpokenVowel, getVowelKind,
-    getRecordingKey, getRecordedAudioFilename,
+    getRecordingKey, getRecordedAudioFilename, getRecordingVowel,
   };
 }

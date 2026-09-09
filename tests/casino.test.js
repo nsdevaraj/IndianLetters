@@ -104,7 +104,7 @@ test('language links select by value, not the reordered dropdown position', () =
 
 test('invalid language links safely default to Tamil', () => {
   const { context } = createApp();
-  for (const value of ['', '-1', '10', '3junk', '1.5', 'null', '%20']) {
+  for (const value of ['', '-1', String(letters.lang.length), '3junk', '1.5', 'null', '%20', '01']) {
     assert.equal(context.getLanguageIndex(`http://localhost/?l=${value}`), 0);
   }
 });
