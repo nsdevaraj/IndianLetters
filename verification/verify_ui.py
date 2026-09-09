@@ -72,6 +72,12 @@ def run(screenshots=None):
             (7, "ક્", "ઊ", "કૂ"),
             (8, "ก", "◌ือ", "กือ"),
             (9, "ක්", "ඐ", "කෳ"),
+            (10, "क्ष्", "इ", "क्षि"),
+            (11, "ခ", "◌ော", "ခေါ"),
+            (12, "ກ", "ເ◌", "ເກ"),
+            (13, "ꦫ", "◌ꦼ", "ꦉ"),
+            (14, "መ", "ኡ", "ሙ"),
+            (15, "ប", "◌ា", "បា"),
         ]
         for language, consonant, vowel, result in samples:
             page.locator("#selectLanguage").select_option(str(language))
@@ -79,6 +85,9 @@ def run(screenshots=None):
             page.locator("#vowelDiv").get_by_role("button", name=vowel, exact=True).click()
             expect(page.locator("#resultLetter")).to_have_text(result)
             expect(page.locator("#centerText")).to_have_text(result)
+            if screenshots and language >= 10:
+                screenshots.mkdir(parents=True, exist_ok=True)
+                page.screenshot(path=str(screenshots / f"language-{language}-desktop.png"), full_page=True)
 
         page.set_viewport_size({"width": 1280, "height": 900})
         page.locator("#selectLanguage").select_option("3")
@@ -127,7 +136,7 @@ def run(screenshots=None):
         page.locator("#spinButton").click()
         assert page.evaluate("animationId === null")
         page.emulate_media(reduced_motion="no-preference")
-        for language in [3, 4, 6, 7, 9]:
+        for language in [3, 4, 6, 7, 9, 10, 11, 12, 13, 14, 15]:
             page.goto(f"{url}?l={language}")
             expect(page.locator("#selectLanguage")).to_have_value(str(language))
         page.goto((root / "audioutils/index.html").as_uri())

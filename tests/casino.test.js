@@ -358,3 +358,31 @@ test('Kannada and Thai playback uses legacy file names without changing the writ
   assert.ok(decodeURIComponent(app.audios[1].url).endsWith('ก plus ื. กื.mp3'));
   assert.equal(app.utterances.length, 0);
 });
+
+test('Amharic shows series/order controls and selects a precomposed syllable', () => {
+  const app = createApp('http://localhost/?l=14');
+  assert.equal(app.elements.consonantHeading.textContent, 'Choose a consonant series');
+  assert.equal(app.elements.vowelHeading.textContent, 'Choose a vowel order');
+  assert.equal(app.elements.consonDiv.children.length, 34);
+  assert.equal(app.elements.vowelDiv.children.length, 7);
+  app.elements.soundButton.dispatch('click');
+  app.context.selectConsonant(3);
+  app.context.selectVowel(1);
+  assert.equal(app.elements.resultLetter.textContent, 'ሙ');
+  assert.equal(app.elements.centerText.textContent, 'ሙ');
+  app.context.setCurrentLang({ value: '0' });
+  assert.equal(app.elements.consonantHeading.textContent, 'Choose a consonant');
+  assert.equal(app.elements.vowelHeading.textContent, 'Add a vowel');
+});
+
+test('all six new languages request their own device voice when recordings are absent', async () => {
+  for (let language = 10; language < letters.lang.length; language++) {
+    const code = letters.languageDetails[language].code;
+    const app = createApp(`http://localhost/?l=${language}`, { voices: [{ lang: 'en-US' }, { lang: code }] });
+    await app.context.playAudio();
+    assert.equal(app.audios.length, 0);
+    assert.equal(app.utterances.length, 1);
+    assert.equal(app.utterances[0].lang, code);
+    assert.ok(!app.utterances[0].text.includes('◌'));
+  }
+});

@@ -26,7 +26,7 @@ test('every indexed file exists and contains actual MP3 rather than mislabeled W
   });
 });
 
-const expectedCoverage = [216, 576, 510, 490, 429, 380, 684, 646, 616, 0];
+const expectedCoverage = [216, 576, 510, 490, 429, 380, 684, 646, 616, 0, 0, 0, 0, 0, 0, 0];
 letters.lang.forEach((name, language) => {
   test(`${name}: every available consonant-vowel recording is mapped`, () => {
     let mapped = 0;

@@ -23,6 +23,12 @@ on resize. Reduced-motion preferences skip the spinning animation. A language
 can be linked directly, for example `index.html?l=3` for Bengali or `?l=6` for
 Malayalam.
 
+Six additional languages are available: **Nepali, Burmese, Lao, Javanese,
+Amharic and Khmer**. Their stable link IDs are `10` through `15`, respectively
+(for example, `index.html?l=14` opens Amharic). Script fonts are bundled locally.
+Amharic selects precomposed syllable orders; the other additions use explicit
+vowel signs or patterns, including Burmese and Javanese spelling exceptions.
+
 Script-specific [Noto fonts](https://fonts.google.com/noto) are bundled locally
 in `fonts/` so letters do not depend on installed system fonts or a CDN.
 Each font's SIL Open Font License is included alongside it. The wheel uses
@@ -43,8 +49,8 @@ unavailable device voices.
 The manifest maps 4,547 current selections. All selections in Tamil, Telugu,
 Kannada, Bengali, Punjabi, Malayalam, Gujarati and Thai have recordings. Hindi
 has recordings for its original 33 consonants (429 combinations); its seven newly
-added nukta letters have no files in this archive. There is no Sinhala audio
-directory. Only these genuinely absent combinations use a matching-language
+added nukta letters have no files in this archive. Sinhala and the six newly
+added languages have no bundled recordings. Only these genuinely absent combinations use a matching-language
 device voice, with a clear message if none is available. Additional archive
 recordings for letters/signs excluded from this exercise are retained.
 
@@ -120,6 +126,12 @@ for **every vowel/sign choice**, not only Unicode-block or array-length checks.
 | Gujarati | 34 consonants | 13 vowels, including loanword vowels, plus 3 Sanskrit vocalics; 3 sign forms | [Unicode Gujarati](https://www.unicode.org/charts/nameslist/n_0A80.html) |
 | Thai | All 44 consonants, including two obsolete letters | 14 common vowel patterns, not the complete Thai vowel system | [Unicode Thai](https://www.unicode.org/charts/nameslist/n_0E00.html), [Thai orthography](https://r12a.github.io/scripts/thai/th.html#vowels) |
 | Sinhala | 41 consonants in the mixed inventory | 18 vowels, including Sanskrit vocalics; 2 sign forms | [Unicode Sinhala](https://www.unicode.org/charts/nameslist/n_0D80.html), [Sinhala orthography](https://r12a.github.io/scripts/sinh/si.html) |
+| Nepali | 33 core consonants plus KSHA, TRA and JNYA conjuncts | 11 vowels; 2 sign forms | [Unicode Devanagari](https://www.unicode.org/charts/nameslist/n_0900.html) |
+| Burmese | 33 traditional consonants | 9 basic vowel patterns with contextual tall AA | [Unicode Myanmar](https://www.unicode.org/charts/nameslist/n_1000.html), [Burmese orthography](https://r12a.github.io/scripts/mymr/my.html) |
+| Lao | 26 core consonants plus R for loanwords | 13 common vowel patterns | [Unicode Lao](https://www.unicode.org/charts/nameslist/n_0E80.html), [Lao orthography](https://r12a.github.io/scripts/laoo/lo.html) |
+| Javanese | 20 hanacaraka consonants | 6 basic vowel patterns, with ra/la + pepet exceptions | [Unicode Javanese](https://www.unicode.org/charts/nameslist/n_A980.html), [Javanese orthography](https://r12a.github.io/scripts/java/jv.html) |
+| Amharic | 34 fidel series, including the VA series | 7 explicit precomposed orders per series (238 forms) | [Unicode Ethiopic](https://www.unicode.org/charts/nameslist/n_1200.html), [Amharic orthography](https://r12a.github.io/scripts/ethi/am.html) |
+| Khmer | 33 consonants | 16 dependent-vowel patterns | [Unicode Khmer](https://www.unicode.org/charts/nameslist/n_1780.html), [Khmer orthography](https://r12a.github.io/scripts/khmr/km.html) |
 
 Important distinctions:
 
@@ -143,6 +155,17 @@ Important distinctions:
 - Unused, inaccurate pseudo-phonetic arrays were removed. Native-script arrays
   are now flat arrays per language; application and legacy generation utilities
   share them instead of maintaining divergent copies.
+- Burmese tall-AA substitutions apply only to the six verified bare-consonant
+  cases in this exercise, not arbitrary clusters. Lao leading vowels are stored
+  before the consonant; Burmese and Khmer pre-base shapes are stored after it.
+- Javanese uses bare hanacaraka letters and replaces isolated ra/la + pepet with
+  pa cerek/nga lelet. Pasangan and extended/murda forms require separate lessons.
+- Amharic uses explicit seven-character rows rather than appending vowel marks
+  or assuming all Ethiopic blocks have identical structure. The native carrier
+  labels identify orders, not uniform phonetic rules; sixth-order pronunciation
+  is context-dependent. Additional labialized forms are excluded.
+- Khmer's two consonant series affect vowel pronunciation. These patterns
+  validate written forms, not a one-to-one independent-vowel sound mapping.
 
 **Limits:** this validates the supported letters, encoding and composition
 rules, not that every generated syllable is a real word or common spelling.
@@ -150,7 +173,10 @@ It is not a complete curriculum for conjuncts, all loanword/Sanskrit extensions,
 Thai tones/final-consonant forms, or pronunciation. Recordings and device voices
 have not been certified by native-language educators. Filename-based legacy
 mappings do not certify the linguistic accuracy of the speech; new Hindi
-extensions and Sinhala still require additional recordings.
+extensions, Sinhala and the six new languages still require additional recordings.
+The bundled cloud-generation batch remains scoped to its original nine recorded
+languages; new languages can use installed device voices or imported recordings
+indexed with `npm run audio:map`.
 
 Additional standalone integrity checks:
 

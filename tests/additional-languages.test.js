@@ -36,6 +36,18 @@ const references = [
     firstSeries: 'ກະ ກາ ກິ ກີ ກຶ ກື ກຸ ກູ ເກ ແກ ໂກ ໃກ ໄກ',
   },
   {
+    language: 13,
+    consonants: 'ꦲ ꦤ ꦕ ꦫ ꦏ ꦢ ꦠ ꦱ ꦮ ꦭ ꦥ ꦝ ꦗ ꦪ ꦚ ꦩ ꦒ ꦧ ꦛ ꦔ',
+    vowels: '◌ ◌ꦶ ◌ꦸ ◌ꦼ ◌ꦺ ◌ꦺꦴ',
+    firstSeries: 'ꦲ ꦲꦶ ꦲꦸ ꦲꦼ ꦲꦺ ꦲꦺꦴ',
+  },
+  {
+    language: 14,
+    consonants: 'ሀ ለ ሐ መ ሠ ረ ሰ ሸ ቀ በ ቨ ተ ቸ ኀ ነ ኘ አ ከ ኸ ወ ዐ ዘ ዠ የ ደ ጀ ገ ጠ ጨ ጰ ጸ ፀ ፈ ፐ',
+    vowels: 'አ ኡ ኢ ኣ ኤ እ ኦ',
+    firstSeries: 'ሀ ሁ ሂ ሃ ሄ ህ ሆ',
+  },
+  {
     language: 15,
     consonants: 'ក ខ គ ឃ ង ច ឆ ជ ឈ ញ ដ ឋ ឌ ឍ ណ ត ថ ទ ធ ន ប ផ ព ភ ម យ រ ល វ ស ហ ឡ អ',
     vowels: '◌ា ◌ិ ◌ី ◌ឹ ◌ឺ ◌ុ ◌ូ ◌ួ ◌ើ ◌ឿ ◌ៀ ◌េ ◌ែ ◌ៃ ◌ោ ◌ៅ',
@@ -62,6 +74,43 @@ test('Burmese bare-consonant exercises select tall AA in simple and composite pa
   }
   assert.equal(data.combineLetters(11, 0, 0), 'ကာ');
   assert.equal(data.combineLetters(11, 0, 8), 'ကော');
+});
+
+test('Javanese pepet uses pa cerek and nga lelet, but taling stays a dependent vowel', () => {
+  const ra = data.consonantLangs[13].indexOf('ꦫ');
+  const la = data.consonantLangs[13].indexOf('ꦭ');
+  assert.equal(data.combineLetters(13, ra, 3), 'ꦉ');
+  assert.equal(data.combineLetters(13, la, 3), 'ꦊ');
+  assert.equal(data.combineLetters(13, ra, 4), 'ꦫꦺ');
+  assert.equal(data.combineLetters(13, la, 4), 'ꦭꦺ');
+  assert.equal(data.getConsonantForm(13, 0), 'ꦲ');
+});
+
+test('Amharic selects all seven explicit syllables in every series instead of appending vowel marks', () => {
+  const rows = [
+    'ሀሁሂሃሄህሆ', 'ለሉሊላሌልሎ', 'ሐሑሒሓሔሕሖ', 'መሙሚማሜምሞ',
+    'ሠሡሢሣሤሥሦ', 'ረሩሪራሬርሮ', 'ሰሱሲሳሴስሶ', 'ሸሹሺሻሼሽሾ',
+    'ቀቁቂቃቄቅቆ', 'በቡቢባቤብቦ', 'ቨቩቪቫቬቭቮ', 'ተቱቲታቴትቶ',
+    'ቸቹቺቻቼችቾ', 'ኀኁኂኃኄኅኆ', 'ነኑኒናኔንኖ', 'ኘኙኚኛኜኝኞ',
+    'አኡኢኣኤእኦ', 'ከኩኪካኬክኮ', 'ኸኹኺኻኼኽኾ', 'ወዉዊዋዌውዎ',
+    'ዐዑዒዓዔዕዖ', 'ዘዙዚዛዜዝዞ', 'ዠዡዢዣዤዥዦ', 'የዩዪያዬይዮ',
+    'ደዱዲዳዴድዶ', 'ጀጁጂጃጄጅጆ', 'ገጉጊጋጌግጎ', 'ጠጡጢጣጤጥጦ',
+    'ጨጩጪጫጬጭጮ', 'ጰጱጲጳጴጵጶ', 'ጸጹጺጻጼጽጾ', 'ፀፁፂፃፄፅፆ',
+    'ፈፉፊፋፌፍፎ', 'ፐፑፒፓፔፕፖ',
+  ];
+  assert.equal(data.languageDetails[14].composition, 'orders');
+  assert.equal(data.consonantLangs[14].length, rows.length);
+  rows.forEach((row, consonant) => {
+    const forms = Array.from(row);
+    assert.equal(forms.length, 7);
+    forms.forEach((form, vowel) => {
+      assert.equal(data.combineLetters(14, consonant, vowel), form);
+      assert.equal(data.getVowelKind(14, vowel), 'vowel order');
+    });
+  });
+  assert.equal(data.combineLetters(14, 3, 1), 'ሙ');
+  assert.equal(data.combineLetters(14, 16, 0), 'አ');
+  assert.equal(data.combineLetters(14, 16, 3), 'ኣ');
 });
 
 test('new pattern languages use native carriers for speech without leaking display placeholders', () => {

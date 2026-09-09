@@ -1,4 +1,20 @@
-var lang = ['தமிழ்', 'తెలుగు', 'ಕನ್ನಡ', 'বাংলা', 'हिंदी', 'ਗੁਰਮੁਖੀ', 'മലയാളം', 'ગુજરાતી', 'ไทย', 'සිංහල'];
+var lang = [
+  'தமிழ்', 'తెలుగు', 'ಕನ್ನಡ', 'বাংলা', 'हिंदी', 'ਗੁਰਮੁਖੀ', 'മലയാളം', 'ગુજરાતી', 'ไทย', 'සිංහල',
+  'नेपाली', 'မြန်မာ', 'ລາວ', 'ꦧꦱꦗꦮ', 'አማርኛ', 'ខ្មែរ',
+];
+
+// Each row contains seven independently encoded Ethiopic syllables, not vowel marks.
+var amharicSyllables = [
+  'ሀሁሂሃሄህሆ', 'ለሉሊላሌልሎ', 'ሐሑሒሓሔሕሖ', 'መሙሚማሜምሞ',
+  'ሠሡሢሣሤሥሦ', 'ረሩሪራሬርሮ', 'ሰሱሲሳሴስሶ', 'ሸሹሺሻሼሽሾ',
+  'ቀቁቂቃቄቅቆ', 'በቡቢባቤብቦ', 'ቨቩቪቫቬቭቮ', 'ተቱቲታቴትቶ',
+  'ቸቹቺቻቼችቾ', 'ኀኁኂኃኄኅኆ', 'ነኑኒናኔንኖ', 'ኘኙኚኛኜኝኞ',
+  'አኡኢኣኤእኦ', 'ከኩኪካኬክኮ', 'ኸኹኺኻኼኽኾ', 'ወዉዊዋዌውዎ',
+  'ዐዑዒዓዔዕዖ', 'ዘዙዚዛዜዝዞ', 'ዠዡዢዣዤዥዦ', 'የዩዪያዬይዮ',
+  'ደዱዲዳዴድዶ', 'ጀጁጂጃጄጅጆ', 'ገጉጊጋጌግጎ', 'ጠጡጢጣጤጥጦ',
+  'ጨጩጪጫጬጭጮ', 'ጰጱጲጳጴጵጶ', 'ጸጹጺጻጼጽጾ', 'ፀፁፂፃፄፅፆ',
+  'ፈፉፊፋፌፍፎ', 'ፐፑፒፓፔፕፖ',
+];
 
 var vowelLetterLangs = [
   ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'],
@@ -11,6 +27,12 @@ var vowelLetterLangs = [
   ['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'ૠ', 'ઌ', 'ૡ', 'એ', 'ઍ', 'ઐ', 'ઓ', 'ઑ', 'ઔ', 'અઁ', 'અં', 'અઃ'],
   ['◌ะ', '◌า', '◌ิ', '◌ี', '◌ึ', '◌ือ', '◌ุ', '◌ู', 'เ◌', 'แ◌', 'โ◌', '◌ำ', 'ไ◌', 'ใ◌'],
   ['අ', 'ආ', 'ඇ', 'ඈ', 'ඉ', 'ඊ', 'උ', 'ඌ', 'එ', 'ඒ', 'ඓ', 'ඔ', 'ඕ', 'ඖ', 'ඍ', 'ඎ', 'ඏ', 'ඐ', 'අං', 'අඃ'],
+  ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'],
+  ['◌ာ', '◌ိ', '◌ီ', '◌ု', '◌ူ', '◌ေ', '◌ဲ', '◌ို', '◌ော'],
+  ['◌ະ', '◌າ', '◌ິ', '◌ີ', '◌ຶ', '◌ື', '◌ຸ', '◌ູ', 'ເ◌', 'ແ◌', 'ໂ◌', 'ໃ◌', 'ໄ◌'],
+  ['◌', '◌ꦶ', '◌ꦸ', '◌ꦼ', '◌ꦺ', '◌ꦺꦴ'],
+  ['አ', 'ኡ', 'ኢ', 'ኣ', 'ኤ', 'እ', 'ኦ'],
+  ['◌ា', '◌ិ', '◌ី', '◌ឹ', '◌ឺ', '◌ុ', '◌ូ', '◌ួ', '◌ើ', '◌ឿ', '◌ៀ', '◌េ', '◌ែ', '◌ៃ', '◌ោ', '◌ៅ'],
 ];
 
 var consonantLangs = [
@@ -24,6 +46,12 @@ var consonantLangs = [
   ['ક', 'ખ', 'ગ', 'ઘ', 'ઙ', 'ચ', 'છ', 'જ', 'ઝ', 'ઞ', 'ટ', 'ઠ', 'ડ', 'ઢ', 'ણ', 'ત', 'થ', 'દ', 'ધ', 'ન', 'પ', 'ફ', 'બ', 'ભ', 'મ', 'ય', 'ર', 'લ', 'ળ', 'વ', 'શ', 'ષ', 'સ', 'હ'],
   ['ก', 'ข', 'ฃ', 'ค', 'ฅ', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'],
   ['ක', 'ඛ', 'ග', 'ඝ', 'ඞ', 'ඟ', 'ච', 'ඡ', 'ජ', 'ඣ', 'ඤ', 'ඥ', 'ඦ', 'ට', 'ඨ', 'ඩ', 'ඪ', 'ණ', 'ඬ', 'ත', 'ථ', 'ද', 'ධ', 'න', 'ඳ', 'ප', 'ඵ', 'බ', 'භ', 'ම', 'ඹ', 'ය', 'ර', 'ල', 'ළ', 'ව', 'හ', 'ශ', 'ෂ', 'ස', 'ෆ'],
+  ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ'],
+  ['က', 'ခ', 'ဂ', 'ဃ', 'င', 'စ', 'ဆ', 'ဇ', 'ဈ', 'ည', 'ဋ', 'ဌ', 'ဍ', 'ဎ', 'ဏ', 'တ', 'ထ', 'ဒ', 'ဓ', 'န', 'ပ', 'ဖ', 'ဗ', 'ဘ', 'မ', 'ယ', 'ရ', 'လ', 'ဝ', 'သ', 'ဟ', 'ဠ', 'အ'],
+  ['ກ', 'ຂ', 'ຄ', 'ງ', 'ຈ', 'ຊ', 'ຍ', 'ດ', 'ຕ', 'ຖ', 'ທ', 'ນ', 'ບ', 'ປ', 'ຜ', 'ຝ', 'ພ', 'ຟ', 'ມ', 'ຢ', 'ຣ', 'ລ', 'ວ', 'ສ', 'ຫ', 'ອ', 'ຮ'],
+  ['ꦲ', 'ꦤ', 'ꦕ', 'ꦫ', 'ꦏ', 'ꦢ', 'ꦠ', 'ꦱ', 'ꦮ', 'ꦭ', 'ꦥ', 'ꦝ', 'ꦗ', 'ꦪ', 'ꦚ', 'ꦩ', 'ꦒ', 'ꦧ', 'ꦛ', 'ꦔ'],
+  amharicSyllables.map(row => Array.from(row)[0]),
+  ['ក', 'ខ', 'គ', 'ឃ', 'ង', 'ច', 'ឆ', 'ជ', 'ឈ', 'ញ', 'ដ', 'ឋ', 'ឌ', 'ឍ', 'ណ', 'ត', 'ថ', 'ទ', 'ធ', 'ន', 'ប', 'ផ', 'ព', 'ភ', 'ម', 'យ', 'រ', 'ល', 'វ', 'ស', 'ហ', 'ឡ', 'អ'],
 ];
 
 var vowelSignLangs = [
@@ -37,9 +65,15 @@ var vowelSignLangs = [
   ['', 'ા', 'િ', 'ી', 'ુ', 'ૂ', 'ૃ', 'ૄ', 'ૢ', 'ૣ', 'ે', 'ૅ', 'ૈ', 'ો', 'ૉ', 'ૌ', 'ઁ', 'ં', 'ઃ'],
   ['ะ', 'า', 'ิ', 'ี', 'ึ', 'ือ', 'ุ', 'ู', 'เ', 'แ', 'โ', 'ำ', 'ไ', 'ใ'],
   ['', 'ා', 'ැ', 'ෑ', 'ි', 'ී', 'ු', 'ූ', 'ෙ', 'ේ', 'ෛ', 'ො', 'ෝ', 'ෞ', 'ෘ', 'ෲ', 'ෟ', 'ෳ', 'ං', 'ඃ'],
+  ['', 'ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'े', 'ै', 'ो', 'ौ', 'ं', 'ः'],
+  ['ာ', 'ိ', 'ီ', 'ု', 'ူ', 'ေ', 'ဲ', 'ို', 'ော'],
+  ['ະ', 'າ', 'ິ', 'ີ', 'ຶ', 'ື', 'ຸ', 'ູ', 'ເ', 'ແ', 'ໂ', 'ໃ', 'ໄ'],
+  ['', 'ꦶ', 'ꦸ', 'ꦼ', 'ꦺ', 'ꦺꦴ'],
+  ['', '', '', '', '', '', ''],
+  ['ា', 'ិ', 'ី', 'ឹ', 'ឺ', 'ុ', 'ូ', 'ួ', 'ើ', 'ឿ', 'ៀ', 'េ', 'ែ', 'ៃ', 'ោ', 'ៅ'],
 ];
 
-var meyEzuthuLangs = ['்', '్', '್', '্', '्', '੍', '്', '્', '', '්'];
+var meyEzuthuLangs = ['்', '్', '್', '্', '्', '੍', '്', '્', '', '්', '्', '', '', '', '', ''];
 
 var languageDetails = [
   {
@@ -88,6 +122,36 @@ var languageDetails = [
     code: 'si-LK', font: 'Noto Sans Sinhala', script: 'Sinhala',
     extendedVowels: ['ඍ', 'ඎ', 'ඏ', 'ඐ'],
     note: 'Mixed Sinhala inventory, including Sanskrit-derived vowels. Anusvara and visarga forms are signs, not independent vowels.',
+  },
+  {
+    code: 'ne-NP', font: 'Noto Sans Devanagari', script: 'Devanagari',
+    note: 'Nepali: 33 core consonants plus the common conjuncts क्ष, त्र and ज्ञ. Anusvara and visarga forms are signs, not independent vowels.',
+  },
+  {
+    code: 'my-MM', font: 'Noto Sans Myanmar', script: 'Myanmar',
+    composition: 'pattern', vowelCarrier: 'အ', tallAAConsonants: ['ခ', 'ဂ', 'င', 'ဒ', 'ပ', 'ဝ'],
+    note: 'Burmese: 33 traditional consonants and nine basic vowel patterns. Tall AA is chosen for the appropriate bare consonants. Medials, tones and stacked forms need separate lessons.',
+  },
+  {
+    code: 'lo-LA', font: 'Noto Sans Lao', script: 'Lao',
+    composition: 'pattern', vowelCarrier: 'ອ',
+    note: 'Lao: 26 core consonants plus ຣ for loanwords, with 13 common vowel patterns. ◌ marks the consonant position. Tones and final-consonant patterns are outside this exercise.',
+  },
+  {
+    code: 'jv-ID', font: 'Noto Sans Javanese', script: 'Javanese',
+    composition: 'pattern', vowelCarrier: 'ꦲ', bareConsonants: true,
+    combinationOverrides: { 'ꦫ|ꦼ': 'ꦉ', 'ꦭ|ꦼ': 'ꦊ' },
+    note: 'Javanese: 20 hanacaraka consonants and six basic vowel patterns. Ra/la with pepet use ꦉ/ꦊ. Pasangan, murda and extended spellings are outside this isolated-syllable exercise.',
+  },
+  {
+    code: 'am-ET', font: 'Noto Sans Ethiopic', script: 'Ethiopic',
+    composition: 'orders', syllables: amharicSyllables,
+    note: 'Amharic: 34 basic fidel series, including ቨ, with seven precomposed orders. The choices label orders, not added vowel marks. Sixth-order pronunciation depends on context; labialized forms are not included.',
+  },
+  {
+    code: 'km-KH', font: 'Noto Sans Khmer', script: 'Khmer',
+    composition: 'pattern', vowelCarrier: 'អ',
+    note: 'Khmer: 33 consonants and 16 dependent-vowel patterns. Vowel sounds depend on the consonant series. Independent vowels, consonant clusters and extra vowel/coda signs are not included.',
   },
 ];
 
