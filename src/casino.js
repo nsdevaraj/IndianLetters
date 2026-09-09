@@ -27,38 +27,7 @@ function assignLanguage() {
   vowelLetter = vowelLetters[0];
   consonantIndex = 0;
   numWedges = vowelLetters.length;
-  switch (currentLang) {
-    case 0:
-      meyEzuthu = '்'
-      break;
-    case 1:
-      meyEzuthu = '్'
-      break;
-    case 2:
-      meyEzuthu = '್'
-      break;
-    case 3:
-      meyEzuthu = '্'
-      break;
-    case 4:
-      meyEzuthu = '्'
-      break;
-    case 5:
-      meyEzuthu = '੍'
-      break;
-    case 6:
-      meyEzuthu = '്'
-      break;
-    case 7:
-      meyEzuthu = '્'
-      break;
-    case 8:
-      meyEzuthu = 'ฺ'
-      break;
-    default:
-      meyEzuthu = ''
-      break;
-  }
+  meyEzuthu = meyEzuthuLangs[currentLang] || '';
 }
 
 function getAverageAngularVelocity(velocities) {
@@ -100,13 +69,10 @@ function selectConsonant(letter) {
   prevletter = letter;
 }
 
-function addWedge(n) {
+function addWedge(n, angle, circleRadius, innerCircleRadius) {
   const vowel = vowelLetters[n];
-  const circleRadius = stage.width() / 6 + 50
-  const innerCircleRadius = circleRadius - circleRadius / 5
-  const angle = (2 * Math.PI) / numWedges;
   const wedge = new Konva.Group({
-    rotation: (2 * n * Math.PI) / numWedges,
+    rotation: n * angle,
   });
   const colors = ['#C41E3A', '#0F52BA', '#50C878', '#9966CC', '#FFBF00', '#E0115F', '#008080', '#FF7F50'];
   const startCol = colors[n % colors.length];
@@ -291,8 +257,11 @@ function init() {
   for (let n = 0; n < consonants.length; n++) {
     addButton(n, consonDiv);
   }
+  const circleRadius = stage.width() / 6 + 50
+  const innerCircleRadius = circleRadius - circleRadius / 5
+  const angle = (2 * Math.PI) / numWedges;
   for (let n = 0; n < numWedges; n++) {
-    addWedge(n);
+    addWedge(n, angle, circleRadius, innerCircleRadius);
   }
 
   setPointer();

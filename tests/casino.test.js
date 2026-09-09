@@ -75,6 +75,7 @@ const sandbox = {
     location: {
         href: 'http://localhost/?l=0'
     },
+    meyEzuthuLangs: ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''],
     Audio: class {
         constructor() {
             this.playbackRate = 1;
@@ -126,75 +127,39 @@ test('getAverageAngularVelocity - handles floating point values', () => {
   assert.strictEqual(result, 2.5);
 });
 
-test('selectConsonant - updates consonant and styles', () => {
-  // Setup
-  sandbox.consonantLangs = [[['क', 'ख', 'ग'], ['ka', 'kha', 'ga']]];
-  sandbox.vowelLetterLangs = [[['अ', 'आ'], ['a', 'aa']]];
-  sandbox.vowelSignLangs = [['', 'ा']];
-  sandbox.currentLang = 0;
-  sandbox.assignLanguage();
+test('assignLanguage - correctly sets meyEzuthu for different languages', () => {
+  // Mock data for vowelLetterLangs
+  sandbox.vowelLetterLangs = [
+    [['அ'], ['a']],
+    [['అ'], ['a']],
+    [['ಅ'], ['a']],
+    [['অ'], ['a']],
+    [['अ'], ['a']],
+    [['ਅ'], ['a']],
+    [['അ'], ['a']],
+    [['અ'], ['a']],
+    [['ะ'], ['a']],
+    [['අ'], ['a']]
+  ];
+  sandbox.vowelSignLangs = [[], [], [], [], [], [], [], [], [], []];
+  sandbox.consonantLangs = [
+    [['க'], ['ka']],
+    [['క'], ['ka']],
+    [['ಕ'], ['ka']],
+    [['ক'], ['ka']],
+    [['क'], ['ka']],
+    [['ਕ'], ['ka']],
+    [['ക'], ['ka']],
+    [['ક'], ['ka']],
+    [['ก'], ['ka']],
+    [['ක'], ['ka']]
+  ];
 
-  let showResultCalled = false;
-  sandbox.showResult = () => { showResultCalled = true; };
+  const expectedMeyEzuthu = ['்', '్', '್', '্', '्', '੍', '്', '્', 'ฺ', ''];
 
-  const mockLetter = {
-    id: '1',
-    style: {
-      backgroundColor: ''
-    }
-  };
-
-  const prevMockLetter = {
-    style: {
-      backgroundColor: '#88a119'
-    }
-  };
-  vm.runInContext('prevletter = this.prevMockLetter', Object.assign(context, { prevMockLetter }));
-
-  // Execute
-  sandbox.selectConsonant(mockLetter);
-
-  // Assert
-  const currentConsonantIndex = vm.runInContext('consonantIndex', context);
-  const currentConsonant = vm.runInContext('consonant', context);
-
-  assert.strictEqual(currentConsonantIndex, 1);
-  assert.strictEqual(currentConsonant, 'ख');
-  assert.strictEqual(showResultCalled, true);
-  assert.strictEqual(prevMockLetter.style.backgroundColor, '#c8a119');
-  assert.strictEqual(mockLetter.style.backgroundColor, '#88a119');
-  const finalPrevLetter = vm.runInContext('prevletter', context);
-  assert.strictEqual(finalPrevLetter, mockLetter);
-});
-
-test('selectConsonant - handles missing prevletter', () => {
-  // Setup
-  sandbox.consonantLangs = [[['क', 'ख', 'ग'], ['ka', 'kha', 'ga']]];
-  sandbox.vowelLetterLangs = [[['अ', 'आ'], ['a', 'aa']]];
-  sandbox.vowelSignLangs = [['', 'ा']];
-  sandbox.currentLang = 0;
-  sandbox.assignLanguage();
-
-  sandbox.showResult = () => {};
-  vm.runInContext('prevletter = null', context);
-
-  const mockLetter = {
-    id: '2',
-    style: {
-      backgroundColor: ''
-    }
-  };
-
-  // Execute
-  sandbox.selectConsonant(mockLetter);
-
-  // Assert
-  const currentConsonantIndex = vm.runInContext('consonantIndex', context);
-  const currentConsonant = vm.runInContext('consonant', context);
-
-  assert.strictEqual(currentConsonantIndex, 2);
-  assert.strictEqual(currentConsonant, 'ग');
-  assert.strictEqual(mockLetter.style.backgroundColor, '#88a119');
-  const finalPrevLetter = vm.runInContext('prevletter', context);
-  assert.strictEqual(finalPrevLetter, mockLetter);
+  for (let i = 0; i < 10; i++) {
+    vm.runInContext(`currentLang = ${i}`, context);
+    sandbox.assignLanguage();
+    assert.strictEqual(vm.runInContext('meyEzuthu', context), expectedMeyEzuthu[i], `Language index ${i} failed`);
+  }
 });

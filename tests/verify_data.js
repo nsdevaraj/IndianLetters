@@ -1,6 +1,12 @@
-const { lang, vowelLetterLangs, consonantLangs, vowelSignLangs } = require('../audioutils/letters_data');
+const { lang, vowelLetterLangs, consonantLangs, vowelSignLangs, meyEzuthuLangs } = require('../audioutils/letters_data');
 
 let errors = [];
+
+if (!meyEzuthuLangs) {
+    errors.push("Missing meyEzuthuLangs array");
+} else if (meyEzuthuLangs.length !== lang.length) {
+    errors.push(`meyEzuthuLangs length (${meyEzuthuLangs.length}) does not match lang length (${lang.length})`);
+}
 
 lang.forEach((l, i) => {
     const vowels = vowelLetterLangs[i];
