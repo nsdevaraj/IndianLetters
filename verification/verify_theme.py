@@ -13,6 +13,7 @@ def run(screenshots=None):
         page = context.new_page()
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.goto(url)
+        language_count = page.locator("#selectLanguage option").count()
         root = page.locator("html")
         toggle = page.get_by_role("button", name="Dark theme", exact=True)
         expect(root).to_have_attribute("data-theme", "dark")
@@ -49,7 +50,7 @@ def run(screenshots=None):
             assert page.evaluate("getComputedStyle(document.documentElement).colorScheme") == theme
             assert page.evaluate("""() => getComputedStyle(document.querySelector('.wheel-inner')).fill
                 === getComputedStyle(document.querySelector('.panel')).backgroundColor""")
-            for language in range(10):
+            for language in range(language_count):
                 page.locator("#selectLanguage").select_option(str(language))
                 page.evaluate("document.fonts.ready")
                 expect(root).to_have_attribute("data-theme", theme)
@@ -92,7 +93,7 @@ def run(screenshots=None):
         expect(blocked_page.locator("html")).to_have_attribute("data-theme", "dark")
         assert not errors, errors
         browser.close()
-    print("Theme checks passed: system preference, persistence, keyboard toggle, blocked storage, uninterrupted selection/spin, both palettes across 10 languages and 4 widths.")
+    print(f"Theme checks passed: system preference, persistence, keyboard toggle, blocked storage, uninterrupted selection/spin, both palettes across {language_count} languages and 4 widths.")
 
 
 if __name__ == "__main__":

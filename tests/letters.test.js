@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const letters = require('../src/letters');
 
 for (const [index, details] of letters.languageDetails.entries()) {
-  test(`${details.script}: data is aligned, unique, and contains only its own script`, () => {
+  test(`${details.code}: data is aligned, unique, and contains only its own script`, () => {
     const consonants = letters.consonantLangs[index];
     const vowels = letters.vowelLetterLangs[index];
     const signs = letters.vowelSignLangs[index];
@@ -24,7 +24,7 @@ for (const [index, details] of letters.languageDetails.entries()) {
     }
   });
 
-  test(`${details.script}: a local font and redistribution license are included`, () => {
+  test(`${details.code}: a local font and redistribution license are included`, () => {
     const base = path.resolve(__dirname, '../fonts', details.font.replaceAll(' ', ''));
     const font = fs.readFileSync(`${base}.ttf`);
     assert.equal(font.readUInt32BE(0), 0x00010000);

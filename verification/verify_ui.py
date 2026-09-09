@@ -15,6 +15,7 @@ def run(screenshots=None):
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.route("https://**/*", lambda route: route.abort())
         page.goto(url)
+        language_count = page.locator("#selectLanguage option").count()
         expect(page.locator("#consonDiv button")).to_have_count(18)
         expect(page.locator("#resultLetter")).to_have_text("க")
         assert page.evaluate("activeAudio === null && animationId === null")
@@ -32,7 +33,7 @@ def run(screenshots=None):
         cdp = context.new_cdp_session(page)
         cdp.send("DOM.enable")
         cdp.send("CSS.enable")
-        for language in range(10):
+        for language in range(language_count):
             page.locator("#selectLanguage").select_option(str(language))
             page.evaluate("document.fonts.ready")
             assert page.evaluate("""() => {
@@ -130,7 +131,7 @@ def run(screenshots=None):
             page.goto(f"{url}?l={language}")
             expect(page.locator("#selectLanguage")).to_have_value(str(language))
         page.goto((root / "audioutils/index.html").as_uri())
-        for language in range(10):
+        for language in range(language_count):
             page.locator("#languagePicker").select_option(str(language))
             page.locator("#generateButton").click()
             expected = page.evaluate(f"consonantLangs[{language}].length * vowelLetterLangs[{language}].length")
@@ -138,7 +139,7 @@ def run(screenshots=None):
             assert "undefined" not in page.locator("#output").inner_text()
         assert not errors, errors
         browser.close()
-    print("Browser checks passed: 10 script fonts, 4 viewport sizes, all-language reference examples and filename previews, Tamil audio, Bengali keyboard selection, spin, drag, resize, deep links, and reduced motion.")
+    print(f"Browser checks passed: {language_count} languages, every letter font, 4 viewport sizes, reference examples and filename previews, Tamil audio, keyboard selection, spin, drag, resize, deep links, and reduced motion.")
 
 
 if __name__ == "__main__":
